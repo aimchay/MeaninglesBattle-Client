@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 383590367
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: scene.ab
+      Dependencies: {}
+    Info_1:
+      Name: items.ab
+      Dependencies: {}
+    Info_2:
+      Name: magic.ab
+      Dependencies: {}
+    Info_3:
+      Name: uitextures.ab
+      Dependencies: {}
