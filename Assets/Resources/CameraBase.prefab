@@ -146,10 +146,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFollowing: 0
+  isDead: 0
+  isBagOpen: 0
+  isEscape: 0
   moveSpeed: 120
   cameraFollowGO: {fileID: 0}
   clampAngle: 80
-  inputSensitivity: 50
+  inputSensitivity: 80
   mainCamera: {fileID: 0}
   player: {fileID: 0}
   canDistanceXToPlayer: 0

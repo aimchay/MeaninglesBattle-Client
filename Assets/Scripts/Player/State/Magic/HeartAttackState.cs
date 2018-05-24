@@ -24,6 +24,7 @@ public class HeartAttackState : FSMState
                     NetworkManager.SendPlayerMagic("Heart Attack", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("HeartAttack").Play();
                     go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("Heart Attack", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                 }
 
             }
@@ -39,6 +40,7 @@ public class HeartAttackState : FSMState
                     NetworkManager.SendPlayerMagic("Heart Attack", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("HeartAttack").Play();
                     go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("Heart Attack", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                 }
 
             }

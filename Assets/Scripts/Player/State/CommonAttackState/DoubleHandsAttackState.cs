@@ -30,49 +30,16 @@ public class DoubleHandsAttackState : FSMState
                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, FSM.characterStatus.Attack_Physics * (1 - enemy.Value.status.Defend_Physics / 100));
                     //单机测试
                     //enemy.playerFSM.characterStatus.HP -= FSM.characterStatus.Attack_Physics * (1 - enemy.playerFSM.characterStatus.Defend_Physics / 100);
+                    if (FSM.characterStatus.weaponType == WeaponType.DoubleHands)
+                    {
+                        AudioManager.PlaySound2D("Axe").Play();
+                    }
                 }
             }
 
+            FSM.animationManager.PlayAnimation("AttackID", FSM.animationManager.combo + 4);
 
-
-            if (!FSM.animationManager.attackStateInfo.IsName("Right Punch Attack") && FSM.comboCount == 0 && FSM.animationManager.baseStateInfo.normalizedTime > 0.4F)
-            {
-                FSM.animationManager.PlayAnimation("AttackID", 4);
-                FSM.comboCount = 1;
-                if (FSM.characterStatus.weaponType == WeaponType.DoubleHands)
-                {
-                    AudioManager.PlaySound2D("Axe").Play();
-                }
-    
-            }
-            else if (FSM.animationManager.attackStateInfo.IsName("Right Punch Attack") && FSM.comboCount == 1 && FSM.animationManager.attackStateInfo.normalizedTime > 0.5F)
-            {
-                FSM.animationManager.PlayAnimation("AttackID", 5);
-                FSM.comboCount = 2;
-                if (FSM.characterStatus.weaponType == WeaponType.DoubleHands)
-                {
-                    AudioManager.PlaySound2D("Axe").Play();
-                }
-
-            }
-            else if (FSM.animationManager.attackStateInfo.IsName("Left Punch Attack") && FSM.comboCount == 2 && FSM.animationManager.attackStateInfo.normalizedTime > 0.4F)
-            {
-                FSM.animationManager.PlayAnimation("AttackID", 6);
-                FSM.comboCount = 3;
-                if (FSM.characterStatus.weaponType == WeaponType.DoubleHands)
-                {
-                    AudioManager.PlaySound2D("Axe").Play();
-                }
-            }
-            else if (FSM.animationManager.attackStateInfo.IsName("Left Punch Attack") && FSM.comboCount == 3 && FSM.animationManager.attackStateInfo.normalizedTime > 0.4F)
-            {
-                FSM.animationManager.PlayAnimation("AttackID", 7);
-                FSM.comboCount = 4;
-                if (FSM.characterStatus.weaponType == WeaponType.DoubleHands)
-                {
-                    AudioManager.PlaySound2D("Axe").Play();
-                }
-            }
+           
             FSM.Attacked = false;
         }
     }
@@ -80,17 +47,18 @@ public class DoubleHandsAttackState : FSMState
     public override void Reason(BaseFSM FSM)
     {
 
-        CharacterMessageDispatcher.Instance.DispatchMesssage
-       (FSMTransitionType.IsIdle,
-       FSM,
-       FSM.animationManager.baseStateInfo.IsName("Idle") && FSM.animationManager.attackStateInfo.normalizedTime > 1.15f
-       );
+        if (!FSM.animationManager.baseStateInfo.IsName("Idle") && FSM.animationManager.attackStateInfo.normalizedTime > 1f)
+        {
+            FSM.animationManager.combo = 0;
+            FSM.animationManager.PlayAnimation("AttackID", 0);
+            FSM.PerformTransition(FSMTransitionType.IsIdle);
+        }
 
         if ( Input.GetButtonDown("Fire1") && FSM.characterStatus.weaponType == WeaponType.DoubleHands)
         {
             FSM.Attacked = true;
-            FSM.PerformTransition(FSMTransitionType.AttackWithDoubleHands);
         }
+
         CharacterMessageDispatcher.Instance.DispatchMesssage
      (FSMTransitionType.CanBeMove,
      FSM,

@@ -9,10 +9,10 @@ namespace Meaningless
     {
 
         public CharacterController CC;
-        public float Gravity=9.8f;
-        public int CurrentSelected=1;
+        public float Gravity = 9.8f;
+        public int CurrentSelected = 1;
         public float deBuffTime = 0;
-        
+
         public List<NetworkPlayer> List_CanAttack = new List<NetworkPlayer>();
 
 
@@ -49,13 +49,13 @@ namespace Meaningless
 
 
         void Update()
-        {          
+        {
             CCUpdate();
         }
 
         void FixedUpdate()
         {
-           CCFixedUpdate();
+            CCFixedUpdate();
         }
 
         public virtual void UseGravity(float Gravity)
@@ -70,33 +70,16 @@ namespace Meaningless
             CC.Move(moveDirection);
         }
 
-        public void OpenBag()
-        {
-            if(Input.GetButtonDown("Bag"))
-            {
-                UIManager.Instance.ShowUI(UIid.BagUI);
-
-                CameraBase.Instance.isFollowing = false;
-
-            }
-        }
-        public void Esc()
-        {
-            if(Input.GetButtonDown("Esc"))
-            {
-                UIManager.Instance.ShowUI(UIid.EscapeUI);
-                CameraBase.Instance.isFollowing = false;
-            }
-        }
+       
 
         public abstract void Move(float walkSpeed, float jumpSpeed);
         public abstract void FallingCtrl(float Speed);
         public abstract void Jump(float jumpSpeed);
         public abstract bool CheckCanAttack(GameObject center, GameObject enemy, float distance, float angle);
-        public abstract void GetDeBuffInTime(BuffType debuff, float time,CharacterStatus status);
+        public abstract void GetDeBuffInTime(BuffType debuff, float time, CharacterStatus status);
 
         public virtual void ChangeWeapon(int currentSelected) { }
-        public virtual void FindTranform(Body type ) { }
+        public virtual void FindTranform(Body type) { }
         public virtual SingleItemInfo GetCurSelectedWeaponInfo() { return null; }
 
 

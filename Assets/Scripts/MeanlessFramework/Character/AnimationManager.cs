@@ -15,6 +15,9 @@ namespace Meaningless
         public int LayerCur;
         public bool AnimLock=false;
         public string AnimStartName="Idle";
+
+        public int combo = 0;
+
         void Start()
         {
             anim = GetComponent<Animator>();
@@ -51,9 +54,9 @@ namespace Meaningless
         /// <summary>
         /// 网络用播放动画
         /// </summary>
-        public void NetPlayClip(string ClipName, int AttackID)
+        public void NetPlayClip(string ClipName)
         {
-
+            Debug.LogError("Lock"+AnimLock);
             if (ClipName == "Idle")
             {
                 if (AnimLock == false)
@@ -104,46 +107,54 @@ namespace Meaningless
             }
 
             //
+            Debug.Log(anim.GetInteger("AttackID"));
             if (ClipName=="AttackID1")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
-                anim.SetInteger("AttacID", 1);
+                anim.SetTrigger(ClipName);
+                anim.SetInteger("AttackID", 1);
             }
             if (ClipName == "AttackID2")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
-                anim.SetInteger("AttacID", 2);
+                anim.SetTrigger(ClipName);
+                anim.SetInteger("AttackID", 2);
             }
             if (ClipName == "AttackID3")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
+                anim.SetTrigger(ClipName);
                 anim.SetInteger("AttackID", 3);
             }
             if (ClipName == "AttackID4")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
+                anim.SetTrigger(ClipName);
                 anim.SetInteger("AttackID", 4);
             }
             if (ClipName == "AttackID5")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
+                anim.SetTrigger(ClipName);
                 anim.SetInteger("AttackID", 5);
             }
             if (ClipName == "AttackID6")
             {
                 AnimLock = true;
                 anim.SetBool("Run", false);
+                anim.SetTrigger(ClipName);
                 anim.SetInteger("AttackID", 6);
             }
             if (ClipName == "AttackID7")
             {
                 AnimLock = true;
                 anim.SetTrigger("Melee Left Attack 01");
+                anim.SetTrigger(ClipName);
                 anim.SetBool("Run", false);
                 anim.SetInteger("AttackID", 7);
             }
@@ -169,7 +180,7 @@ namespace Meaningless
         /// <returns></returns>
         public int GetAttackID()
         {
-            return anim.GetInteger("Attack ID");
+            return anim.GetInteger("AttackID");
         }
         #region 动画事件
         public void MagicShootEnd()
@@ -230,7 +241,7 @@ namespace Meaningless
         }
         public void IdleStart()
         {
-            //AnimStartName = "Idle";
+            AnimStartName = "Idle";
         }
         public void MagicShootStart()
         {
@@ -252,30 +263,37 @@ namespace Meaningless
         public void AttackID1Start()
         {
             AnimStartName = "AttackID1";
+            combo = 1;
         }
         public void AttackID2Start()
         {
             AnimStartName = "AttackID2";
+            combo = 2;
         }
         public void AttackID3Start()
         {
             AnimStartName = "AttackID3";
+            combo = 0;
         }
         public void AttackID4Start()
         {
             AnimStartName = "AttackID4";
+            combo = 1;
         }
         public void AttackID5Start()
         {
             AnimStartName = "AttackID5";
+            combo = 2;
         }
         public void AttackID6Start()
         {
             AnimStartName = "AttackID6";
+            combo = 3;
         }
         public void AttackID7Start()
         {
             AnimStartName = "AttackID7";
+            combo = 0;
         }
         #endregion
     }

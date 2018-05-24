@@ -396,8 +396,6 @@ public class PlayerController : MeaninglessCharacterController
     protected override void CCUpdate()
     {
         CurrentSelected = BagManager.Instance.CurrentSelected;
-        OpenBag();
-        Esc();
         //MessageCenter.Send(EMessageType.CurrentselectedWeapon, CurrentSelected);
 
         if (buffList.Count > 0)

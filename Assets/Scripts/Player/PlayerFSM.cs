@@ -71,12 +71,12 @@ public class PlayerFSM :BaseFSM
 
         SingleWieldAttackState singleWieldAttack = new SingleWieldAttackState();
         singleWieldAttack.AddTransition(FSMTransitionType.IsIdle, FSMStateType.Idle);
-        singleWieldAttack.AddTransition(FSMTransitionType.AttackWithSingleWield, FSMStateType.SingleWieldAttack);
+        //singleWieldAttack.AddTransition(FSMTransitionType.AttackWithSingleWield, FSMStateType.SingleWieldAttack);
         singleWieldAttack.AddTransition(FSMTransitionType.CanBeMove, FSMStateType.Move);
 
         DoubleHandsAttackState dualWieldAttack = new DoubleHandsAttackState();
         dualWieldAttack.AddTransition(FSMTransitionType.IsIdle, FSMStateType.Idle);
-        dualWieldAttack.AddTransition(FSMTransitionType.AttackWithDoubleHands, FSMStateType.DoubleHandsAttack);
+        //dualWieldAttack.AddTransition(FSMTransitionType.AttackWithDoubleHands, FSMStateType.DoubleHandsAttack);
         dualWieldAttack.AddTransition(FSMTransitionType.CanBeMove, FSMStateType.Move);
 
 

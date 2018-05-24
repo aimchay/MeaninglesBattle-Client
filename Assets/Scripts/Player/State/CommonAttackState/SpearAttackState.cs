@@ -32,6 +32,7 @@ public class SpearAttackState : FSMState
                 }
             }
             FSM.animationManager.PlayAnimation("Spear Melee Attack 02");
+            
             FSM.Attacked = false;
         }
 

@@ -6,7 +6,9 @@ using Meaningless;
 public class CameraBase : MonoSingleton<CameraBase>
 {
     public bool isFollowing=false;
-
+    public bool isDead = false;
+    public bool isBagOpen = false;
+    public bool isEscape = false;
     public float moveSpeed = 120f;
     public GameObject cameraFollowGO;
     public float clampAngle = 80f;
@@ -43,6 +45,9 @@ public class CameraBase : MonoSingleton<CameraBase>
            Cursor.lockState = CursorLockMode.None;
            Cursor.visible = true;
         }
+
+        OpenBag();
+        Esc();
     }
 
     public void FindPlayer()
@@ -83,5 +88,36 @@ public class CameraBase : MonoSingleton<CameraBase>
         {
             transform.position = Vector3.MoveTowards(transform.position, cameraFollowGO.transform.position, step);
         } 
+    }
+
+    public void OpenBag()
+    {
+        if (Input.GetButtonUp("Bag"))
+        {
+            if (!CameraBase.Instance.isDead)
+            {
+                if (!CameraBase.Instance.isBagOpen)
+                {
+                    UIManager.Instance.ShowUI(UIid.BagUI);
+                    isBagOpen = true;
+                    isFollowing = false;
+                }
+                else
+                {
+
+                    UIManager.Instance.ReturnUI(UIid.HUDUI);
+                    isBagOpen = false;
+                    isFollowing = true;
+                }
+            }
+        }
+    }
+    public void Esc()
+    {
+        if (Input.GetButtonDown("Esc"))
+        {
+            UIManager.Instance.ShowUI(UIid.EscapeUI);
+           isFollowing = false;
+        }
     }
 }
