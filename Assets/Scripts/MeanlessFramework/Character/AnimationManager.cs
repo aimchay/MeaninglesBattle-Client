@@ -56,7 +56,7 @@ namespace Meaningless
         /// </summary>
         public void NetPlayClip(string ClipName)
         {
-            Debug.LogError("Lock"+AnimLock);
+
             if (ClipName == "Idle")
             {
                 if (AnimLock == false)

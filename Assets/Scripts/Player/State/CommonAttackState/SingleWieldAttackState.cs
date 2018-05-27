@@ -15,7 +15,7 @@ public class SingleWieldAttackState : FSMState
 
     public override void Act(BaseFSM FSM)
     {
-        Debug.LogError("c" + FSM.animationManager.combo);
+
 
         if (FSM.controller.GetCurSelectedWeaponInfo() != null)
         {

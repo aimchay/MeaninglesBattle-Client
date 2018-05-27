@@ -20,9 +20,8 @@ public class RippleAttackState : FSMState
                 {
                     BagManager.Instance.UseMagic(0);
                     FSM.PlayAnimation("Magic Shoot Attack");
-                    GameObject go = NetPoolManager.Instantiate("Ripple", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("Ripple").Play();
-                    go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("Ripple", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position,Look(FSM));
                 }
             }
         if (BagManager.Instance.skillAttributesList[1].skillInfo != BagManager.Instance.NullInfo)
@@ -32,9 +31,8 @@ public class RippleAttackState : FSMState
                 {
                     BagManager.Instance.UseMagic(1);
                     FSM.PlayAnimation("Magic Shoot Attack");
-                    GameObject go = NetPoolManager.Instantiate("Ripple", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("Ripple").Play();
-                    go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("Ripple", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position,Look(FSM));
                 }
             }
 
@@ -47,5 +45,21 @@ public class RippleAttackState : FSMState
             FSM,
             FSM.animationManager.baseStateInfo.IsName("Idle")
             );
+    }
+    private Quaternion Look(BaseFSM FSM)
+    {
+        //Ray ray = new Ray(GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+        RaycastHit hitInfo;
+        Vector3 targetPoint;
+        if (Physics.Raycast(ray, out hitInfo))
+        {
+            targetPoint = hitInfo.point;
+        }
+        else
+        {
+            targetPoint = Camera.main.transform.forward * 100;
+        }
+        return Quaternion.LookRotation(targetPoint - GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position);
     }
 }

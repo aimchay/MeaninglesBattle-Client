@@ -7,26 +7,13 @@ public class ParticleMove : MonoBehaviour
 {
     public int moveSpeed;
     public int destoryTime;
-    private NetPoolManager NetPoolManager;
+    private NetPoolManager NetPoolManager=new NetPoolManager();
     private Rigidbody RB;
     float time = 0;
     RaycastHit hitInfo;
     Vector3 targetPoint;
-    void Start()
-    {
-        NetPoolManager = new NetPoolManager();
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
-        if (Physics.Raycast(ray, out hitInfo))
-        {
-            targetPoint = hitInfo.point;
-            Debug.Log(hitInfo.collider);
-        }
-        else
-        {
-            targetPoint = Camera.main.transform.forward * 100;
-        }
-        transform.LookAt(targetPoint);
-    }
+   
+    
 
     private void FixedUpdate()
     {

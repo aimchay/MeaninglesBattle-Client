@@ -244,6 +244,8 @@ public class NetworkPlayerManager : MonoBehaviour
     private void OnPlayerMagicBack(BaseProtocol protocol)
     {
         BytesProtocol p = protocol as BytesProtocol;
+        RaycastHit hitInfo;
+        Vector3 targetPoint;
         int startIndex = 0;
         p.GetString(startIndex, ref startIndex);
         string MagicName = p.GetString(startIndex, ref startIndex);
@@ -253,8 +255,12 @@ public class NetworkPlayerManager : MonoBehaviour
         float rotX = p.GetFloat(startIndex, ref startIndex);
         float rotY = p.GetFloat(startIndex, ref startIndex);
         float rotZ = p.GetFloat(startIndex, ref startIndex);
-        
-        NetPoolManager.Instantiate(MagicName,new Vector3(posX,posY,posZ), Quaternion.Euler(rotX, rotY, rotZ));
+
+        GameObject go = NetPoolManager.Instantiate(MagicName,new Vector3(posX,posY,posZ), Quaternion.Euler(rotX, rotY, rotZ));
+        go.GetComponent<MagicBehaviour>().isHit = true;
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
+
+
     }
     private void OnPlayerGetBuff(BaseProtocol protocol)
     {

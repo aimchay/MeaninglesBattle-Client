@@ -21,10 +21,10 @@ public class ThunderBoltState : FSMState
                 if (BagManager.Instance.skillAttributesList[0].isOn)
                 {
                     BagManager.Instance.UseMagic(0);
-                    GameObject go = NetPoolManager.Instantiate("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
+                   // GameObject go = NetPoolManager.Instantiate("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
                     AudioManager.PlaySound2D("ThunderBolt").Play();
-                    go.GetComponent<MagicBehaviour>().isHit = true;
-                    NetworkManager.SendPlayerMagic("ThunderBolt", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
+                   // go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
                 }
             }
         if (BagManager.Instance.skillAttributesList[1].skillInfo != BagManager.Instance.NullInfo)
@@ -34,10 +34,10 @@ public class ThunderBoltState : FSMState
                 if (BagManager.Instance.skillAttributesList[1].isOn)
                 {
                     BagManager.Instance.UseMagic(1);
-                    GameObject go = NetPoolManager.Instantiate("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
+                  //  GameObject go = NetPoolManager.Instantiate("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
                     AudioManager.PlaySound2D("ThunderBolt").Play();
-                    go.GetComponent<MagicBehaviour>().isHit = true;
-                    NetworkManager.SendPlayerMagic("ThunderBolt", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, FSM.transform.rotation);
+                   // go.GetComponent<MagicBehaviour>().isHit = true;
+                    NetworkManager.SendPlayerMagic("ThunderBolt", FSM.transform.position + FSM.transform.forward * 5, FSM.transform.rotation);
                 }
 
             }

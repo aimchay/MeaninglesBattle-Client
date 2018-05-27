@@ -10,8 +10,11 @@ public class MagicBehaviour : MonoBehaviour
     public PlayerController player;
     public bool isHit = false;
 
-    // Use this for initialization
-    void Start()
+    private void Start()
+    {
+        player = CameraBase.Instance.player.GetComponent<PlayerController>();
+    }
+    void OnEnable()
     {
         player = CameraBase.Instance.player.GetComponent<PlayerController>();
     }
@@ -24,25 +27,26 @@ public class MagicBehaviour : MonoBehaviour
             switch (magicType)
             {
                 case MagicType.Ripple:
-                    Damage(2, 30);
+                    Damage(2.5f,360);
+                   
                     break;
                 case MagicType.HeartAttack:
-                    Damage(2, 30);
+                    Damage(2.5f, 360);
                     break;
                 case MagicType.IceArrow:
                     float IProbability = ItemInfoManager.Instance.GetItemInfo(603).magicProperties.Probability;
-                    Damage(1, 30);
+                    Damage(2.5f, 360);
                     if (Random.value < IProbability)
                     {
-                        Freeze(2, 2.5f, 30);
+                        Freeze(2, 2.5f, 360);
                     }
                     break;
                 case MagicType.ChoshimArrow:
                     float CProbability = ItemInfoManager.Instance.GetItemInfo(604).magicProperties.Probability;
-                    Damage(1, 30);
+                    Damage(2.5f, 360);
                     if (Random.value < CProbability)
                     {
-                        SlowDown(4, 2.5f, 30);
+                        SlowDown(4, 2.5f, 360);
                     }
                     break;
                 case MagicType.StygianDesolator:
@@ -64,7 +68,7 @@ public class MagicBehaviour : MonoBehaviour
             if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
             {
                 NetworkManager.SendPlayerHitSomeone(enemy.Value.name, BagManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
-
+   
             }
         }
     }
@@ -87,6 +91,7 @@ public class MagicBehaviour : MonoBehaviour
         {
             if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
             {
+                if(enemy.Value.name!=NetworkManager.PlayerName)
                 NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName, BuffType.Blind, buffTime);
             }
         }
