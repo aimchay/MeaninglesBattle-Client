@@ -23,9 +23,14 @@ public class CameraBase : MonoSingleton<CameraBase>
     private float rotY = 0f;
     private float rotX = 0f;
 
-    private void Start()
+    private void Awake()
     {
         FindPlayer();
+    }
+
+    private void Start()
+    {
+        
         Vector3 rot = transform.localRotation.eulerAngles;
         rotX = rot.x;
         rotY = rot.y;

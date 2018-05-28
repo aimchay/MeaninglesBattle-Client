@@ -7,7 +7,6 @@ public class ParticleMove : MonoBehaviour
 {
     public int moveSpeed;
     public int destoryTime;
-    private NetPoolManager NetPoolManager=new NetPoolManager();
     private Rigidbody RB;
     float time = 0;
     RaycastHit hitInfo;
