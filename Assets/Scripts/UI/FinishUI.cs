@@ -19,7 +19,7 @@ public class FinishUI : BaseUI
         Rank = GameTool.GetTheChildComponent<Text>(gameObject, "Rank");
         Result = GameTool.GetTheChildComponent<Text>(gameObject, "Result");
 
-        MessageCenter.AddListener_Multparam(EMessageType.FinishUI, SetData);
+        MessageCenter.AddListener(EMessageType.FinishUI, SetData);
     }
     protected override void InitDataOnAwake()
     {

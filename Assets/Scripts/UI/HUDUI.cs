@@ -44,7 +44,7 @@ public class HUDUI : BaseUI
         Text_Time = GameTool.GetTheChildComponent<Text>(gameObject, "TextTime");
         MessageCenter.AddListener(EMessageType.FoundItem, AwakePickUpTip);
         MessageCenter.AddListener(EMessageType.CurrentHP, UpdateHP);
-        MessageCenter.AddListener(EMessageType.Remain, (object obj) => { Text_Remain.text = "" + (int)obj; });
+        MessageCenter.AddListener(EMessageType.Remain, (object[] obj) => { Text_Remain.text = "" + (int)obj[0]; });
 
     }
 
@@ -68,12 +68,12 @@ public class HUDUI : BaseUI
 
     private void UpdateSkillCount()
     {
-        if (BagManager.Instance.Magic1 != BagManager.Instance.NullInfo)
+        if (PlayerStatusManager.Instance.Magic1 != PlayerStatusManager.Instance.NullInfo)
         {
             Text_Skill1_Count.gameObject.SetActive(true);
             Img_Skill1_Mask.gameObject.SetActive(true);
-            Text_Skill1_Count.text = BagManager.Instance.skillAttributesList[0].remainCount + "/" + BagManager.Instance.skillAttributesList[0].skillInfo.magicProperties.UsableCount;
-            Img_Skill1_Mask.fillAmount = BagManager.Instance.skillAttributesList[0].Timer / BagManager.Instance.skillAttributesList[0].skillInfo.magicProperties.CDTime;
+            Text_Skill1_Count.text = PlayerStatusManager.Instance.skillAttributesList[0].remainCount + "/" + PlayerStatusManager.Instance.skillAttributesList[0].skillInfo.magicProperties.UsableCount;
+            Img_Skill1_Mask.fillAmount = PlayerStatusManager.Instance.skillAttributesList[0].Timer / PlayerStatusManager.Instance.skillAttributesList[0].skillInfo.magicProperties.CDTime;
         }
         else
         {
@@ -81,12 +81,12 @@ public class HUDUI : BaseUI
             Img_Skill1_Mask.gameObject.SetActive(false);
         }
 
-        if (BagManager.Instance.Magic2 != BagManager.Instance.NullInfo)
+        if (PlayerStatusManager.Instance.Magic2 != PlayerStatusManager.Instance.NullInfo)
         {
             Text_Skill2_Count.gameObject.SetActive(true);
             Img_Skill2_Mask.gameObject.SetActive(true);
-            Text_Skill2_Count.text = BagManager.Instance.skillAttributesList[1].remainCount + "/" + BagManager.Instance.skillAttributesList[1].skillInfo.magicProperties.UsableCount;
-            Img_Skill2_Mask.fillAmount = BagManager.Instance.skillAttributesList[1].Timer / BagManager.Instance.skillAttributesList[1].skillInfo.magicProperties.CDTime;
+            Text_Skill2_Count.text = PlayerStatusManager.Instance.skillAttributesList[1].remainCount + "/" + PlayerStatusManager.Instance.skillAttributesList[1].skillInfo.magicProperties.UsableCount;
+            Img_Skill2_Mask.fillAmount = PlayerStatusManager.Instance.skillAttributesList[1].Timer / PlayerStatusManager.Instance.skillAttributesList[1].skillInfo.magicProperties.CDTime;
         }
         else
         {
@@ -102,34 +102,34 @@ public class HUDUI : BaseUI
 
     private void SetBarIcon()
     {
-        if (BagManager.Instance.Weapon1.weaponProperties != null)
+        if (PlayerStatusManager.Instance.Weapon1.weaponProperties != null)
         {
-            if (BagManager.Instance.Weapon1.ResName != "")
-                Img_Weapon1.sprite = ResourcesManager.Instance.GetUITexture(BagManager.Instance.Weapon1.ResName);
+            if (PlayerStatusManager.Instance.Weapon1.ResName != "")
+                Img_Weapon1.sprite = ResourcesManager.Instance.GetUITexture(PlayerStatusManager.Instance.Weapon1.ResName);
         }
         else
             Img_Weapon1.sprite = ResourcesManager.Instance.GetUITexture("Null");
 
-        if (BagManager.Instance.Weapon2.weaponProperties != null)
+        if (PlayerStatusManager.Instance.Weapon2.weaponProperties != null)
         {
-            if (BagManager.Instance.Weapon2.ResName != "")
-                Img_Weapon2.sprite = ResourcesManager.Instance.GetUITexture(BagManager.Instance.Weapon2.ResName);
+            if (PlayerStatusManager.Instance.Weapon2.ResName != "")
+                Img_Weapon2.sprite = ResourcesManager.Instance.GetUITexture(PlayerStatusManager.Instance.Weapon2.ResName);
         }
         else
             Img_Weapon2.sprite = ResourcesManager.Instance.GetUITexture("Null");
 
-        if (BagManager.Instance.Magic1.magicProperties != null)
+        if (PlayerStatusManager.Instance.Magic1.magicProperties != null)
         {
-            if (BagManager.Instance.Magic1.ResName != "")
-                Img_Skill1.sprite = ResourcesManager.Instance.GetUITexture(BagManager.Instance.Magic1.ResName);
+            if (PlayerStatusManager.Instance.Magic1.ResName != "")
+                Img_Skill1.sprite = ResourcesManager.Instance.GetUITexture(PlayerStatusManager.Instance.Magic1.ResName);
         }
         else
             Img_Skill1.sprite = ResourcesManager.Instance.GetUITexture("Null");
 
-        if (BagManager.Instance.Magic2.magicProperties != null)
+        if (PlayerStatusManager.Instance.Magic2.magicProperties != null)
         {
-            if (BagManager.Instance.Magic2.ResName != "")
-                Img_Skill2.sprite = ResourcesManager.Instance.GetUITexture(BagManager.Instance.Magic2.ResName);
+            if (PlayerStatusManager.Instance.Magic2.ResName != "")
+                Img_Skill2.sprite = ResourcesManager.Instance.GetUITexture(PlayerStatusManager.Instance.Magic2.ResName);
         }
         else
             Img_Skill2.sprite = ResourcesManager.Instance.GetUITexture("Null");

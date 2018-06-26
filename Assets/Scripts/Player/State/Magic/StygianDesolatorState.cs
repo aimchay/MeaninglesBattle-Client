@@ -14,12 +14,12 @@ public class StygianDesolatorState : FSMState
 
     public override void Act(BaseFSM FSM)
     {
-        if (BagManager.Instance.skillAttributesList[0].skillInfo != BagManager.Instance.NullInfo)
-            if (BagManager.Instance.skillAttributesList[0].skillInfo.magicProperties.magicType == MagicType.StygianDesolator)
+        if (PlayerStatusManager.Instance.skillAttributesList[0].skillInfo != PlayerStatusManager.Instance.NullInfo)
+            if (PlayerStatusManager.Instance.skillAttributesList[0].skillInfo.magicProperties.magicType == MagicType.StygianDesolator)
             {
-                if (BagManager.Instance.skillAttributesList[0].isOn)
+                if (PlayerStatusManager.Instance.skillAttributesList[0].isOn)
                 {
-                    BagManager.Instance.UseMagic(0);
+                    PlayerStatusManager.Instance.UseMagic(0);
                     FSM.PlayAnimation("Spin Attack");
                    // GameObject go = NetPoolManager.Instantiate("Stygian Desolator", GameTool.FindTheChild(FSM.gameObject, "RigPelvisGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("Stygian Desolator").Play();
@@ -28,13 +28,13 @@ public class StygianDesolatorState : FSMState
                 }
 
             }
-        if (BagManager.Instance.skillAttributesList[1].skillInfo != BagManager.Instance.NullInfo)
-            if (BagManager.Instance.skillAttributesList[1].skillInfo.magicProperties.magicType == MagicType.StygianDesolator)
+        if (PlayerStatusManager.Instance.skillAttributesList[1].skillInfo != PlayerStatusManager.Instance.NullInfo)
+            if (PlayerStatusManager.Instance.skillAttributesList[1].skillInfo.magicProperties.magicType == MagicType.StygianDesolator)
             {
 
-                if (BagManager.Instance.skillAttributesList[1].isOn)
+                if (PlayerStatusManager.Instance.skillAttributesList[1].isOn)
                 {
-                    BagManager.Instance.UseMagic(1);
+                    PlayerStatusManager.Instance.UseMagic(1);
                     FSM.PlayAnimation("Spin Attack");
                    // GameObject go = NetPoolManager.Instantiate("Stygian Desolator", GameTool.FindTheChild(FSM.gameObject, "RigPelvisGizmo").position, FSM.transform.rotation);
                     AudioManager.PlaySound2D("Stygian Desolator").Play();

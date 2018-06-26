@@ -22,6 +22,8 @@ public class CameraBase : MonoSingleton<CameraBase>
     private float mouseY;
     private float rotY = 0f;
     private float rotX = 0f;
+    private float h;
+    private float v;
 
     private void Awake()
     {
@@ -47,8 +49,8 @@ public class CameraBase : MonoSingleton<CameraBase>
         } 
         else
         {
-           Cursor.lockState = CursorLockMode.None;
-           Cursor.visible = true;
+           //Cursor.lockState = CursorLockMode.None;
+           //Cursor.visible = true;
         }
 
         OpenBag();
@@ -72,18 +74,21 @@ public class CameraBase : MonoSingleton<CameraBase>
 
     private void Follow()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
 
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
+
+        h = Input.GetAxis("Horizontal");
+        v = Input.GetAxis("Vertical");
 
         rotY += mouseX * inputSensitivity * Time.deltaTime;
         rotX -= mouseY * inputSensitivity * Time.deltaTime;
         rotX = Mathf.Clamp(rotX, -clampAngle, clampAngle);
         Quaternion localRotation = Quaternion.Euler(rotX, rotY, 0);
         transform.rotation = localRotation;
-        player.transform.rotation = Quaternion.Euler(0, rotY, 0);
+        player.transform.LookAt(player.transform.position + transform.right * h + Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized * v);
     }
 
     private void LateUpdate()
@@ -91,7 +96,7 @@ public class CameraBase : MonoSingleton<CameraBase>
         float step = moveSpeed * Time.deltaTime;
         if (isFollowing)
         {
-            transform.position = Vector3.MoveTowards(transform.position, cameraFollowGO.transform.position, step);
+            transform.position = Vector3.MoveTowards(transform.position, player.transform.position, step);
         } 
     }
 

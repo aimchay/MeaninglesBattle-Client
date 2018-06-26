@@ -159,6 +159,13 @@ ModelImporter:
       curves: []
       events:
       - time: 0
+        functionName: 
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
         functionName: IdleStart
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -214,8 +221,8 @@ ModelImporter:
           Prop Left
         weight: 1
       - path: RigPelvis/RigSpine1/RigSpine2/RigRibcage/RigLArm1/RigLArm2/RigLArmPalm/Dummy
-          Prop Left/Box001
-        weight: 1
+          Prop Left/Placeholder Shield
+        weight: 0
       - path: RigPelvis/RigSpine1/RigSpine2/RigRibcage/RigNeck
         weight: 1
       - path: RigPelvis/RigSpine1/RigSpine2/RigRibcage/RigNeck/RigHead
@@ -233,8 +240,8 @@ ModelImporter:
           Prop Right
         weight: 1
       - path: RigPelvis/RigSpine1/RigSpine2/RigRibcage/RigRArm1/RigRArm2/RigRArmPalm/Dummy
-          Prop Right/Sword
-        weight: 1
+          Prop Right/Placeholder Sword
+        weight: 0
       - path: RigPelvisGizmo
         weight: 1
       - path: RigRArm1Gizmo

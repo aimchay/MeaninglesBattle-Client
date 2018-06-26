@@ -25,6 +25,7 @@ public enum WeaponType
     DoubleHands,
     Spear,
     Shield,
+    Magic,
 }
 
 /// <summary>

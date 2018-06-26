@@ -20,7 +20,7 @@ public class LoadingUI : BaseUI, IPointerDownHandler
     {
         text = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text");
 
-        MessageCenter.AddListener_Multparam(EMessageType.LoadingUI, SetTips);
+        MessageCenter.AddListener(EMessageType.LoadingUI, SetTips);
         MessageCenter.AddListener(EMessageType.LoadingScene, LoadScene);
     }
     protected override void InitDataOnAwake()

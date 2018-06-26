@@ -55,7 +55,7 @@ public class NetworkPlayerManager : MonoBehaviour
         //自己的消息
         if(playerName==NetworkManager.PlayerName)
         {
-            BagManager.Instance.characterStatus.HP = HP;
+            PlayerStatusManager.Instance.characterStatus.HP = HP;
         }
 
         if (ScenePlayers.ContainsKey(playerName))
@@ -156,7 +156,7 @@ public class NetworkPlayerManager : MonoBehaviour
             param[0] = "无畏之争——无谓之争";
             param[1] = "你被 "+KillerName+" 击杀";
             param[2] = " ";
-            MessageCenter.Send_Multparam(EMessageType.FinishUI,param);
+            MessageCenter.Send(EMessageType.FinishUI,param);
             CameraBase.Instance.isFollowing = false;
             return;
         }
@@ -179,7 +179,7 @@ public class NetworkPlayerManager : MonoBehaviour
                 param[0] = "无畏之争，无谓之争";
                 param[1] = "你被暗影毒杀";
                 param[2] = " ";
-                MessageCenter.Send_Multparam(EMessageType.FinishUI, param);
+                MessageCenter.Send(EMessageType.FinishUI, param);
                 CameraBase.Instance.isFollowing = false;
             }
             
@@ -196,7 +196,7 @@ public class NetworkPlayerManager : MonoBehaviour
         param[0] = "无畏之争，无胃之争";
         param[1] = "今晚不会有人抢你的鸡吃了";
         param[2] = "胜利者 ";
-        MessageCenter.Send_Multparam(EMessageType.FinishUI, param);
+        MessageCenter.Send(EMessageType.FinishUI, param);
         CameraBase.Instance.isFollowing = false;
     }
     private void OnPlayerEquipHelmet(BaseProtocol protocol)
@@ -244,8 +244,6 @@ public class NetworkPlayerManager : MonoBehaviour
     private void OnPlayerMagicBack(BaseProtocol protocol)
     {
         BytesProtocol p = protocol as BytesProtocol;
-        RaycastHit hitInfo;
-        Vector3 targetPoint;
         int startIndex = 0;
         p.GetString(startIndex, ref startIndex);
         string MagicName = p.GetString(startIndex, ref startIndex);
@@ -273,7 +271,7 @@ public class NetworkPlayerManager : MonoBehaviour
 
         if(playerName==NetworkManager.PlayerName)
         {
-            CameraBase.Instance.player.GetComponent<PlayerController>().GetDeBuffInTime((BuffType)bufftype,buffTime, BagManager.Instance.characterStatus);
+            CameraBase.Instance.player.GetComponent<PlayerController>().GetDeBuffInTime((BuffType)bufftype,buffTime, PlayerStatusManager.Instance.characterStatus);
         }
     }
 }

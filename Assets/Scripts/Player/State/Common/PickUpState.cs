@@ -26,7 +26,7 @@ public class PickUpState : FSMState
                     pickedupItemID = pickUpItemTran.GetComponent<GroundItem>().ItemID;
                     SingleItemInfo ItemInfo;
                     ItemInfo = ItemInfoManager.Instance.GetItemInfo(pickedupItemID);
-                    BagManager.Instance.PickItem(pickedupItemID);
+                    PlayerStatusManager.Instance.PickItem(pickedupItemID);
                     FSM.GetComponent<PlayerController>().PickItem(pickUpItemTran);
                     FSM.animationManager.PlayAnimation("Pick Up");
 

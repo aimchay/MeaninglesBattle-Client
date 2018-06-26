@@ -203,23 +203,23 @@ public class PlayerController : MeaninglessCharacterController
         switch (currentSelected)
         {
             case 1:
-                if (BagManager.Instance.Weapon1 != null)
+                if (PlayerStatusManager.Instance.Weapon1 != null)
                 {
-                    if (BagManager.Instance.Weapon2 != null)
+                    if (PlayerStatusManager.Instance.Weapon2 != null)
                     {
                         UnEquip(EquippedItem.Weapon2);
                     }
-                    EquipWeapon(BagManager.Instance.Weapon1.ItemID);
+                    EquipWeapon(PlayerStatusManager.Instance.Weapon1.ItemID);
                 }
                 break;
             case 2:
-                if (BagManager.Instance.Weapon2 != null)
+                if (PlayerStatusManager.Instance.Weapon2 != null)
                 {
-                    if (BagManager.Instance.Weapon1 != null)
+                    if (PlayerStatusManager.Instance.Weapon1 != null)
                     {
                         UnEquip(EquippedItem.Weapon1);
                     }
-                    EquipWeapon(BagManager.Instance.Weapon2.ItemID);
+                    EquipWeapon(PlayerStatusManager.Instance.Weapon2.ItemID);
                 }
                 break;
             case 3:
@@ -269,16 +269,16 @@ public class PlayerController : MeaninglessCharacterController
                 itemInfo = null;
                 break;
             case 1:
-                itemInfo = BagManager.Instance.Weapon1;
+                itemInfo = PlayerStatusManager.Instance.Weapon1;
                 break;
             case 2:
-                itemInfo = BagManager.Instance.Weapon2;
+                itemInfo = PlayerStatusManager.Instance.Weapon2;
                 break;
             case 3:
-                itemInfo = BagManager.Instance.Magic1;
+                itemInfo = PlayerStatusManager.Instance.Magic1;
                 break;
             case 4:
-                itemInfo = BagManager.Instance.Magic2;
+                itemInfo = PlayerStatusManager.Instance.Magic2;
                 break;
         }
         return itemInfo;
@@ -343,16 +343,16 @@ public class PlayerController : MeaninglessCharacterController
         {
             case BuffType.SlowDown:
                 status.moveSpeed /= 0.7f;
-                if (BagManager.Instance.Body == null)
+                if (PlayerStatusManager.Instance.Body == null)
                     UnEquip(EquippedItem.Body);
                 else
-                    EquipClothes(BagManager.Instance.Body.ItemID);
+                    EquipClothes(PlayerStatusManager.Instance.Body.ItemID);
                 break;
             case BuffType.Freeze:
-                if (BagManager.Instance.Body == null)
+                if (PlayerStatusManager.Instance.Body == null)
                     UnEquip(EquippedItem.Body);
                 else
-                    EquipClothes(BagManager.Instance.Body.ItemID);
+                    EquipClothes(PlayerStatusManager.Instance.Body.ItemID);
                 status.moveSpeed /= 0.001f;
                 break;
             case BuffType.Blind:
@@ -395,7 +395,7 @@ public class PlayerController : MeaninglessCharacterController
 
     protected override void CCUpdate()
     {
-        CurrentSelected = BagManager.Instance.CurrentSelected;
+        CurrentSelected = PlayerStatusManager.Instance.CurrentSelected;
         //MessageCenter.Send(EMessageType.CurrentselectedWeapon, CurrentSelected);
 
         if (buffList.Count > 0)

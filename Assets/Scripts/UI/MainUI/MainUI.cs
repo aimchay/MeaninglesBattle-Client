@@ -33,9 +33,9 @@ public class MainUI : BaseUI
 
         Text_PlayerName = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_PlayerName");
 
-        MessageCenter.AddListener(EMessageType.PlayerName, (object obj) =>
+        MessageCenter.AddListener(EMessageType.PlayerName, (object[] obj) =>
         {
-            Text_PlayerName.text = (string)obj;
+            Text_PlayerName.text = (string)obj[0];
         });
 
 
@@ -78,7 +78,7 @@ public class MainUI : BaseUI
             object[] param = new object[2];
             param[0] = "加入房间失败";
             param[1] = "返回";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
         }
 
     }
@@ -109,7 +109,7 @@ public class MainUI : BaseUI
             object[] param = new object[2];
             param[0] = "创建房间失败";
             param[1] = "返回";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
         }
     }
 

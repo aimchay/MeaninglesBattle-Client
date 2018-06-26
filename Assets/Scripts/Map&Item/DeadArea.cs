@@ -30,6 +30,6 @@ public class DeadArea : MonoBehaviour
         param[0] = "珍惜生命，远离悬崖";
         param[1] = "你死于跳崖自杀";
         param[2] = " ";
-        MessageCenter.Send_Multparam(EMessageType.FinishUI, param);
+        MessageCenter.Send(EMessageType.FinishUI, param);
     }
 }

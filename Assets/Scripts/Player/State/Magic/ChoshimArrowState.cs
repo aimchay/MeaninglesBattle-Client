@@ -13,12 +13,12 @@ public class ChoshimArrowState : FSMState
 
     public override void Act(BaseFSM FSM)
     {
-        if (BagManager.Instance.skillAttributesList[0].skillInfo != BagManager.Instance.NullInfo)
-            if (BagManager.Instance.skillAttributesList[0].skillInfo.magicProperties.magicType == MagicType.ChoshimArrow)
+        if (PlayerStatusManager.Instance.skillAttributesList[0].skillInfo != PlayerStatusManager.Instance.NullInfo)
+            if (PlayerStatusManager.Instance.skillAttributesList[0].skillInfo.magicProperties.magicType == MagicType.ChoshimArrow)
             {
-                if (BagManager.Instance.skillAttributesList[0].isOn)
+                if (PlayerStatusManager.Instance.skillAttributesList[0].isOn)
                 {
-                    BagManager.Instance.UseMagic(0);
+                    PlayerStatusManager.Instance.UseMagic(0);
                     FSM.PlayAnimation("Magic Shoot Attack");
                     AudioManager.PlaySound2D("Arrow").Play();
                     NetworkManager.SendPlayerMagic("Choshim Arrow", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, Look(FSM));
@@ -26,12 +26,12 @@ public class ChoshimArrowState : FSMState
 
             }
     
-        if (BagManager.Instance.skillAttributesList[1].skillInfo != BagManager.Instance.NullInfo)
-            if (BagManager.Instance.skillAttributesList[1].skillInfo.magicProperties.magicType == MagicType.ChoshimArrow)
+        if (PlayerStatusManager.Instance.skillAttributesList[1].skillInfo != PlayerStatusManager.Instance.NullInfo)
+            if (PlayerStatusManager.Instance.skillAttributesList[1].skillInfo.magicProperties.magicType == MagicType.ChoshimArrow)
             {
-                if (BagManager.Instance.skillAttributesList[1].isOn)
+                if (PlayerStatusManager.Instance.skillAttributesList[1].isOn)
                 {
-                    BagManager.Instance.UseMagic(1);
+                    PlayerStatusManager.Instance.UseMagic(1);
                     FSM.PlayAnimation("Magic Shoot Attack");
                     AudioManager.PlaySound2D("Arrow").Play();
                     NetworkManager.SendPlayerMagic("Choshim Arrow", GameTool.FindTheChild(FSM.gameObject, "RigLArmPalmGizmo").position, Look(FSM));

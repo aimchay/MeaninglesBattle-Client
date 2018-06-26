@@ -52,7 +52,7 @@ public class LoginUI : BaseUI
             object[] param = new object[2];
             param[0] = "昵称不可以为空";
             param[1] = "知道了";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
             return;
         }
 
@@ -99,7 +99,7 @@ public class LoginUI : BaseUI
             object[] param = new object[2];
             param[0] = "连接失败\n可能原因：昵称已被使用、服务器问题 或 网络故障";
             param[1] = "知道了";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
         }
     }
 }

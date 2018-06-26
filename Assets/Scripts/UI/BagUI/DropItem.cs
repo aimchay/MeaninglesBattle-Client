@@ -20,7 +20,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
     void Start()
     {
         image = GameTool.FindTheChild(gameObject, "Image").GetComponent<Image>();
-        MessageCenter.AddListener(Meaningless.EMessageType.GetBagListFull, (object obj) => { bagListFull = (bool)obj; });
+        MessageCenter.AddListener(Meaningless.EMessageType.GetBagListFull, (object[] obj) => { bagListFull = (bool)obj[0]; });
         cv = gameObject.transform.parent.gameObject;
         rectTransform = cv.transform as RectTransform;
     }
@@ -60,7 +60,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
 
                                 param[0] = equippedItemType;
                                 param[1] = bagListitem.Item;
-                                MessageCenter.Send_Multparam(Meaningless.EMessageType.EquipItem, param);
+                                MessageCenter.Send(Meaningless.EMessageType.EquipItem, param);
 
                                 ItemInfo = bagListitem.Item;
 
@@ -79,7 +79,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 object[] param = new object[2];
                                 param[0] = equippedItemType;
                                 param[1] = dropItem.ItemInfo;
-                                MessageCenter.Send_Multparam(Meaningless.EMessageType.EquipItem, param);
+                                MessageCenter.Send(Meaningless.EMessageType.EquipItem, param);
 
                                 ItemInfo = dropItem.ItemInfo;
                                 canDrag = true;
@@ -96,7 +96,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 {
                                     image.sprite = bagListitem.img.sprite;
 
-                                    BagManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
+                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
                                     ItemInfo = bagListitem.Item;
 
                                     bagListitem.Equip();
@@ -116,7 +116,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 {
                                     image.sprite = bagListitem.img.sprite;
 
-                                    BagManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
+                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
                                     ItemInfo = bagListitem.Item;
 
                                     bagListitem.Equip();
@@ -138,8 +138,8 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 {
                                     image.sprite = bagListitem.img.sprite;
                                     // MessageCenter.Send_Multparam(Meaningless.EMessageType.EquipItem, param);
-                                    BagManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
-                                    BagManager.Instance.CurrentSelected = 1;
+                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
+                                    PlayerStatusManager.Instance.CurrentSelected = 1;
                                     CameraBase.Instance.player.GetComponent<PlayerController>().ChangeWeapon(1);
                                     NetworkManager.SendPlayerEquipWeapon(bagListitem.Item.ItemID); //发送换武器消息
 
@@ -161,8 +161,8 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 {
                                     image.sprite = bagListitem.img.sprite;
 
-                                    BagManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
-                                    BagManager.Instance.CurrentSelected = 2;
+                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
+                                    PlayerStatusManager.Instance.CurrentSelected = 2;
                                     CameraBase.Instance.player.GetComponent<PlayerController>().ChangeWeapon(2);
                                     NetworkManager.SendPlayerEquipWeapon(bagListitem.Item.ItemID); //发送换武器消息
                                     ItemInfo = bagListitem.Item;
@@ -182,7 +182,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                             {
                                 image.sprite = bagListitem.img.sprite;
 
-                                BagManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
+                                PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
 
                                 ItemInfo = bagListitem.Item;
 
@@ -252,8 +252,8 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
         if (!bagListFull)
         {
             image.sprite = ResourcesManager.Instance.GetUITexture("Null");
-            BagManager.Instance.PickItem(ItemInfo.ItemID);
-            BagManager.Instance.UnequipItem(equippedItemType);
+            PlayerStatusManager.Instance.PickItem(ItemInfo.ItemID);
+            PlayerStatusManager.Instance.UnequipItem(equippedItemType);
             if(ItemInfo.itemType!=ItemType.Gem)
             {
                 CameraBase.Instance.player.GetComponent<PlayerController>().UnEquip(equippedItemType);
@@ -278,7 +278,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
     public void ThrowAway()
     {
         image.sprite = ResourcesManager.Instance.GetUITexture("Null");
-        BagManager.Instance.UnequipItem(equippedItemType);
+        PlayerStatusManager.Instance.UnequipItem(equippedItemType);
         if (ItemInfo.itemType != ItemType.Gem)
         {
             CameraBase.Instance.player.GetComponent<PlayerController>().UnEquip(equippedItemType);

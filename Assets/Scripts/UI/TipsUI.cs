@@ -18,7 +18,7 @@ public class TipsUI : BaseUI
         Text_Button = GameTool.GetTheChildComponent<Text>(GameTool.FindTheChild(this.gameObject, "Btn_OK").gameObject, "Text");
         Text_Tips = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Tips");
 
-        MessageCenter.AddListener_Multparam(EMessageType.TipsUI, SetTips);
+        MessageCenter.AddListener(EMessageType.TipsUI, SetTips);
 
     }
     protected override void InitDataOnAwake()

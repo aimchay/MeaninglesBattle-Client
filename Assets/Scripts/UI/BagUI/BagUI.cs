@@ -84,8 +84,8 @@ public class BagUI : BaseUI
         InitBagItem(scrollRect.content, BagItem);
         InitBagItem(equipScrollRect.content, EquipItem);
         //SetEquippedItems();
-        SetBagListItems(BagManager.Instance.List_PickUp, BagItem);
-        SetBagListItems(BagManager.Instance.List_Equip, EquipItem);
+        SetBagListItems(PlayerStatusManager.Instance.List_PickUp, BagItem);
+        SetBagListItems(PlayerStatusManager.Instance.List_Equip, EquipItem);
     }
 
     protected override void InitInStart()
@@ -95,13 +95,13 @@ public class BagUI : BaseUI
 
     protected override void OnEnable()
     {
-        RefreshBagList(BagManager.Instance.List_PickUp);
-        RefreshBagList(BagManager.Instance.List_Equip);
+        RefreshBagList(PlayerStatusManager.Instance.List_PickUp);
+        RefreshBagList(PlayerStatusManager.Instance.List_Equip);
     }
 
     private void Update()
     {
-        //SetEquippedItems(BagManager.Instance.Dict_Equipped);
+        //SetEquippedItems(PlayerStatusManager.Instance.Dict_Equipped);
         
     }
 
@@ -120,8 +120,8 @@ public class BagUI : BaseUI
         {
             EquipItem[i].SetActive(false);
         }
-        SetBagListItems(BagManager.Instance.List_PickUp,BagItem);
-        SetBagListItems(BagManager.Instance.List_Equip, EquipItem);
+        SetBagListItems(PlayerStatusManager.Instance.List_PickUp,BagItem);
+        SetBagListItems(PlayerStatusManager.Instance.List_Equip, EquipItem);
     }
     /// <summary>
     /// 设置列表物件显示

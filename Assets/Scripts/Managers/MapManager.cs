@@ -135,7 +135,7 @@ public class MapManager : MonoSingleton<MapManager>
         object[] param = new object[2];
         param[0] = "正在接收道具数据...";
         param[1] = 0;
-        MessageCenter.Send_Multparam(EMessageType.LoadingUI, param);
+        MessageCenter.Send(EMessageType.LoadingUI, param);
 
         if (Seed != 0)
         {
@@ -143,7 +143,7 @@ public class MapManager : MonoSingleton<MapManager>
             RandomList = InitTotalProbabilityValue(ProbabilityValue);
             param[0] = "道具数据接收完毕";
             param[1] = 0;
-            MessageCenter.Send_Multparam(EMessageType.LoadingUI, param);
+            MessageCenter.Send(EMessageType.LoadingUI, param);
 
             GenerateItem();
         }
@@ -163,7 +163,7 @@ public class MapManager : MonoSingleton<MapManager>
         object[] param = new object[2];
         param[0] = "正在生成地图物品...";
         param[1] =0;
-        MessageCenter.Send_Multparam(EMessageType.LoadingUI, param);
+        MessageCenter.Send(EMessageType.LoadingUI, param);
 
 
         //地上物品生成：
@@ -186,7 +186,7 @@ public class MapManager : MonoSingleton<MapManager>
 
         param[0] = "地图物品生成完毕";
         param[1] = 2;
-        MessageCenter.Send_Multparam(EMessageType.LoadingUI, param);
+        MessageCenter.Send(EMessageType.LoadingUI, param);
         NetworkManager.SendPlayerReady();
         NetworkManager.SendReqDroppoint();
 

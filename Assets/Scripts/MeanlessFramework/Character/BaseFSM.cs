@@ -115,7 +115,7 @@ namespace Meaningless
 
         void Start()
         {
-            MessageCenter.AddListener(EMessageType.FoundItem, (object obj) => { isFound = (bool)obj; });
+            MessageCenter.AddListener(EMessageType.FoundItem, (object[] obj) => { isFound = (bool)obj[0]; });
             Initialize();
         }
 

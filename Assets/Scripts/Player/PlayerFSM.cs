@@ -21,7 +21,7 @@ public class PlayerFSM :BaseFSM
         controller = GetComponent<MeaninglessCharacterController>();
         ConstructFSM();
         //LoadCharacterStatus();
-        MessageCenter.AddListener(EMessageType.FoundItem, (object obj) => { isFound = (bool)obj; });
+        MessageCenter.AddListener(EMessageType.FoundItem, (object[] obj) => { isFound = (bool)obj[0]; });
     }
 
     protected override void FSMFixedUpdate()
@@ -38,7 +38,7 @@ public class PlayerFSM :BaseFSM
 
     protected override void FSMUpdate()
     {
-        characterStatus=BagManager.Instance.GetCharacterStatus();
+        characterStatus=PlayerStatusManager.Instance.GetCharacterStatus();
     }
 
     private void ConstructFSM()

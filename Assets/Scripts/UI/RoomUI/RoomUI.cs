@@ -65,7 +65,7 @@ public class RoomUI : BaseUI
             object[] param = new object[2];
             param[0] = "离开房间失败，服务器无响应";
             param[1] = "知道了";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
         }
         else
         {
@@ -93,7 +93,7 @@ public class RoomUI : BaseUI
             object[] param = new object[2];
             param[0] = "无法开始，人数不够";
             param[1] = "返回";
-            MessageCenter.Send_Multparam(EMessageType.TipsUI, param);
+            MessageCenter.Send(EMessageType.TipsUI, param);
         }
 
     }

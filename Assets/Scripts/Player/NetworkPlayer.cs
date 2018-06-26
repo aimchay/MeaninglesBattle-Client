@@ -124,37 +124,37 @@ public class NetworkPlayer : MonoBehaviour {
         protocol.SpliceFloat(transform.rotation.y);
         protocol.SpliceFloat(transform.rotation.z);
 
-        if(BagManager.Instance.Head==null)
+        if(PlayerStatusManager.Instance.Head==null)
         {
             protocol.SpliceInt(0);
         }
         else
         {
-            protocol.SpliceInt(BagManager.Instance.Head.ItemID);
+            protocol.SpliceInt(PlayerStatusManager.Instance.Head.ItemID);
         }
 
-        if (BagManager.Instance.Body == null)
+        if (PlayerStatusManager.Instance.Body == null)
         {
             protocol.SpliceInt(0);
         }
         else
         {
-            protocol.SpliceInt(BagManager.Instance.Body.ItemID);
+            protocol.SpliceInt(PlayerStatusManager.Instance.Body.ItemID);
         }
-        if (BagManager.Instance.Weapon1 == null && BagManager.Instance.Weapon2 == null)
+        if (PlayerStatusManager.Instance.Weapon1 == null && PlayerStatusManager.Instance.Weapon2 == null)
         {
             protocol.SpliceInt(0);
         }
         else
         {
-            protocol.SpliceInt(BagManager.Instance.Body .ItemID);
+            protocol.SpliceInt(PlayerStatusManager.Instance.Body .ItemID);
         }
 
         // protocol.SpliceInt(WeaponID);
         // protocol.SpliceString(CurrentAction);
 
         //playerFSM.characterStatus.HP;
-        status = BagManager.Instance.characterStatus;
+        status = PlayerStatusManager.Instance.characterStatus;
 
         return protocol;
     }

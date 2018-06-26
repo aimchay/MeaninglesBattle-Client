@@ -19,6 +19,7 @@ public class MagicBehaviour : MonoBehaviour
         player = CameraBase.Instance.player.GetComponent<PlayerController>();
     }
 
+/* 
     // Update is called once per frame
     void Update()
     {
@@ -27,26 +28,26 @@ public class MagicBehaviour : MonoBehaviour
             switch (magicType)
             {
                 case MagicType.Ripple:
-                    Damage(2.5f,360);
+                    Damage(3f,360);
                    
                     break;
                 case MagicType.HeartAttack:
-                    Damage(2.5f, 360);
+                    Damage(3f, 360);
                     break;
                 case MagicType.IceArrow:
                     float IProbability = ItemInfoManager.Instance.GetItemInfo(603).magicProperties.Probability;
-                    Damage(2.5f, 360);
+                    Damage(3f, 360);
                     if (Random.value < IProbability)
                     {
-                        Freeze(2, 2.5f, 360);
+                        Freeze(2, 3f, 360);
                     }
                     break;
                 case MagicType.ChoshimArrow:
                     float CProbability = ItemInfoManager.Instance.GetItemInfo(604).magicProperties.Probability;
-                    Damage(2.5f, 360);
+                    Damage(3f, 360);
                     if (Random.value < CProbability)
                     {
-                        SlowDown(4, 2.5f, 360);
+                        SlowDown(4,3f, 360);
                     }
                     break;
                 case MagicType.StygianDesolator:
@@ -60,14 +61,14 @@ public class MagicBehaviour : MonoBehaviour
         }
 
     }
-
+*/
     void Damage(float distance, float angle)
     {
         foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
         {
             if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
             {
-                NetworkManager.SendPlayerHitSomeone(enemy.Value.name, BagManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
    
             }
         }
@@ -108,4 +109,54 @@ public class MagicBehaviour : MonoBehaviour
             }
         }
     }
+
+    void OnTriggerEnter(Collider collider)
+    {
+       
+        if (isHit)
+        {
+            foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
+             {
+                 if(enemy.Value.PlayerName==NetworkManager.PlayerName)
+                 {
+                     continue;
+                 }
+                switch (magicType)
+                 {
+                    case MagicType.Ripple:
+                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                    break;
+                    case MagicType.HeartAttack:
+                    Damage(3f, 360);
+                    break;
+                    case MagicType.IceArrow:
+                        float IProbability = ItemInfoManager.Instance.GetItemInfo(603).magicProperties.Probability;
+                         NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                        if (Random.value < IProbability)
+                        {
+                          NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.Freeze,2);
+                        }
+                    break;
+                    case MagicType.ChoshimArrow:
+                    float CProbability = ItemInfoManager.Instance.GetItemInfo(604).magicProperties.Probability;
+                    NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                    if (Random.value < CProbability)
+                    {
+                       NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.SlowDown,5);
+                    }
+                    break;
+                    case MagicType.StygianDesolator:
+                     NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.Blind,5);
+                    break;
+                    case MagicType.Thunderbolt:
+                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                    break;
+                 }
+                 
+            }
+            isHit = false;
+        }
+
+    }
+
 }

@@ -125,7 +125,7 @@ public class BagListitem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         PressedSlider.value = 0;
         txt.text = "";
         img.sprite = null;
-        BagManager.Instance.List_Equip.RemoveAt(Index);
+        PlayerStatusManager.Instance.List_Equip.RemoveAt(Index);
         gameObject.SetActive(false);
         Destroy(dragObj);
     }
@@ -143,9 +143,9 @@ public class BagListitem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void ThrowAway()
     {
         if (Item.itemType == ItemType.Gem || Item.itemType == ItemType.Expendable)
-            BagManager.Instance.List_PickUp.RemoveAt(Index);
+            PlayerStatusManager.Instance.List_PickUp.RemoveAt(Index);
         else
-            BagManager.Instance.List_Equip.RemoveAt(Index);
+            PlayerStatusManager.Instance.List_Equip.RemoveAt(Index);
         CameraBase.Instance.player.GetComponent<PlayerController>().DiscardItem(Item.ItemID);
         PressedSlider.value = 0;
         txt.text = "";
