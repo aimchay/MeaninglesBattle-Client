@@ -25,13 +25,6 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
         rectTransform = cv.transform as RectTransform;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-
     public void OnDrop(PointerEventData eventData)
     {
         if (canDrag == false)
@@ -40,7 +33,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
             {
                 BagListitem bagListitem = eventData.pointerDrag.GetComponent<BagListitem>();
                 DropItem dropItem = eventData.pointerDrag.GetComponent<DropItem>();
-
+                
                 switch (equippedItemType)
                 {
                     case EquippedItem.BodyGem1:
@@ -49,23 +42,14 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                     case EquippedItem.HeadGem2:
                     case EquippedItem.Weapon1_Gem1:
                     case EquippedItem.Weapon1_Gem2:
-                    case EquippedItem.Weapon2_Gem1:
-                    case EquippedItem.Weapon2_Gem2:
                         if (bagListitem != null)
                         {
                             if (bagListitem.Item.itemType == ItemType.Gem)
                             {
                                 image.sprite = bagListitem.img.sprite;
-                                object[] param = new object[2];
-
-                                param[0] = equippedItemType;
-                                param[1] = bagListitem.Item;
-                                MessageCenter.Send(Meaningless.EMessageType.EquipItem, param);
-
+                                PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
                                 ItemInfo = bagListitem.Item;
-
                                 bagListitem.UseItem();
-
                                 canDrag = true;
                             }
                         }
@@ -75,11 +59,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                             {
                                 image.sprite = dropItem.image.sprite;
                                 MessageCenter.Send(Meaningless.EMessageType.UnEquipItem, dropItem.equippedItemType);
-
-                                object[] param = new object[2];
-                                param[0] = equippedItemType;
-                                param[1] = dropItem.ItemInfo;
-                                MessageCenter.Send(Meaningless.EMessageType.EquipItem, param);
+                                PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
 
                                 ItemInfo = dropItem.ItemInfo;
                                 canDrag = true;
@@ -95,13 +75,9 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 if (bagListitem.Item.armorProperties.armorType == ArmorType.Head)
                                 {
                                     image.sprite = bagListitem.img.sprite;
-
                                     PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
                                     ItemInfo = bagListitem.Item;
-
                                     bagListitem.Equip();
-                                    CameraBase.Instance.player.GetComponent<PlayerController>().EquipHelmet(bagListitem.Item.ItemID);
-                                    NetworkManager.SendPlayerEquipHelmet(bagListitem.Item.ItemID); //发送戴头盔消息
                                     canDrag = true;
                                 }
                             }
@@ -115,14 +91,9 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 if (bagListitem.Item.armorProperties.armorType == ArmorType.Body)
                                 {
                                     image.sprite = bagListitem.img.sprite;
-
                                     PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
                                     ItemInfo = bagListitem.Item;
-
                                     bagListitem.Equip();
-                                    CameraBase.Instance.player.GetComponent<PlayerController>().EquipClothes(bagListitem.Item.ItemID);
-                                    NetworkManager.SendPlayerEquipClothe(bagListitem.Item.ItemID); //发送着衫消息
-
                                     canDrag = true;
                                 }
                             }
@@ -138,35 +109,8 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                                 {
                                     image.sprite = bagListitem.img.sprite;
                                     // MessageCenter.Send_Multparam(Meaningless.EMessageType.EquipItem, param);
-                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
-                                    PlayerStatusManager.Instance.CurrentSelected = 1;
-                                    CameraBase.Instance.player.GetComponent<PlayerController>().ChangeWeapon(1);
-                                    NetworkManager.SendPlayerEquipWeapon(bagListitem.Item.ItemID); //发送换武器消息
-
+                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);                               
                                     ItemInfo = bagListitem.Item;
-
-                                    bagListitem.Equip();
-
-                                    canDrag = true;
-                                }
-                            }
-                        }
-                        break;
-                    case EquippedItem.Weapon2:
-                        if (bagListitem != null)
-                        {
-                            if (bagListitem.Item.itemType == ItemType.Weapon)
-                            {
-                                if (bagListitem.Item.weaponProperties.weaponType != WeaponType.Shield)
-                                {
-                                    image.sprite = bagListitem.img.sprite;
-
-                                    PlayerStatusManager.Instance.EquipItem(equippedItemType, bagListitem.Item);
-                                    PlayerStatusManager.Instance.CurrentSelected = 2;
-                                    CameraBase.Instance.player.GetComponent<PlayerController>().ChangeWeapon(2);
-                                    NetworkManager.SendPlayerEquipWeapon(bagListitem.Item.ItemID); //发送换武器消息
-                                    ItemInfo = bagListitem.Item;
-
                                     bagListitem.Equip();
 
                                     canDrag = true;
@@ -195,7 +139,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
                         break;
 
                 }
-
+                
 
             }
         }
@@ -254,7 +198,7 @@ public class DropItem : MonoBehaviour, IDropHandler, IDragHandler, IBeginDragHan
             image.sprite = ResourcesManager.Instance.GetUITexture("Null");
             PlayerStatusManager.Instance.PickItem(ItemInfo.ItemID);
             PlayerStatusManager.Instance.UnequipItem(equippedItemType);
-            if(ItemInfo.itemType!=ItemType.Gem)
+            if (ItemInfo.itemType != ItemType.Gem)
             {
                 CameraBase.Instance.player.GetComponent<PlayerController>().UnEquip(equippedItemType);
             }

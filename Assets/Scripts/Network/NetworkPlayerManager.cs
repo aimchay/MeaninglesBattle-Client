@@ -7,7 +7,7 @@ using Meaningless;
 /// <summary>
 /// 网络玩家管理器，一些战斗事件也在这里
 /// </summary>
-public class NetworkPlayerManager : MonoBehaviour
+public class NetworkPlayerManager : MonoSingleton<NetworkPlayerManager>
 {
 
     public Dictionary<string, NetworkPlayer> ScenePlayers = new Dictionary<string, NetworkPlayer>();
@@ -15,7 +15,8 @@ public class NetworkPlayerManager : MonoBehaviour
     void Start()
     {
         NetworkManager.AddEventListener("GetPlayersInfo", OnGetPlayersInfo);
-        NetworkManager.AddEventListener("UpdatePlayerInfo", UpdatePlayerInfo);
+        NetworkManager.AddEventListener("UpdatePlayerTranform", UpdatePlayerTransform);
+        NetworkManager.AddEventListener("UpdatePlayerAction", UpdatePlayerAction);
         NetworkManager.AddEventListener("PlayerKilled",OnPlayerKilled);
         NetworkManager.AddEventListener("PlayerEquipHelmet", OnPlayerEquipHelmet);
         NetworkManager.AddEventListener("PlayerEquipClothe", OnPlayerEquipClothe);
@@ -30,6 +31,7 @@ public class NetworkPlayerManager : MonoBehaviour
     void Update()
     {
         MessageCenter.Send(EMessageType.Remain, ScenePlayers.Count+1);
+        MessageCenter.Send(EMessageType.RefreshHUD, null);
         //Debug.Log(ScenePlayers.Count+"Name"+NetworkManager.PlayerName);
     }
 
@@ -37,7 +39,7 @@ public class NetworkPlayerManager : MonoBehaviour
     /// 更新网络玩家数据
     /// </summary>
     /// <param name="protocol"></param>
-    public void UpdatePlayerInfo(BaseProtocol protocol)
+    public void UpdatePlayerTransform(BaseProtocol protocol)
     {
         BytesProtocol p = protocol as BytesProtocol;
         int startIndex = 0;
@@ -50,7 +52,7 @@ public class NetworkPlayerManager : MonoBehaviour
         float rotX = p.GetFloat(startIndex, ref startIndex);
         float rotY = p.GetFloat(startIndex, ref startIndex);
         float rotZ = p.GetFloat(startIndex, ref startIndex);
-        string CurrentAction = p.GetString(startIndex, ref startIndex);
+       
 
         //自己的消息
         if(playerName==NetworkManager.PlayerName)
@@ -60,11 +62,26 @@ public class NetworkPlayerManager : MonoBehaviour
 
         if (ScenePlayers.ContainsKey(playerName))
         {
-            ScenePlayers[playerName].SetPlayerInfo(HP, CurrentAction);
-            ScenePlayers[playerName].SetPlayerTransform(posX, posY, posZ, rotX, rotY, rotZ);
+            ScenePlayers[playerName].SetPlayerTransform(posX, posY, posZ, rotX, rotY, rotZ,HP);
         }
     }
 
+    public void UpdatePlayerAction(BaseProtocol protocol)
+    {
+        BytesProtocol p = protocol as BytesProtocol;
+        int startIndex = 0;
+        p.GetString(startIndex, ref startIndex);
+        string playerName = p.GetString(startIndex, ref startIndex);
+        int CurrentAction = p.GetInt(startIndex, ref startIndex);
+
+        Debug.Log(playerName + CurrentAction);
+
+        if (ScenePlayers.ContainsKey(playerName))
+        {
+
+            ScenePlayers[playerName].SetPlayerAction(CurrentAction);
+        }
+    }
 
     /// <summary>
     /// 获取玩家列表回调
@@ -271,7 +288,8 @@ public class NetworkPlayerManager : MonoBehaviour
 
         if(playerName==NetworkManager.PlayerName)
         {
-            CameraBase.Instance.player.GetComponent<PlayerController>().GetDeBuffInTime((BuffType)bufftype,buffTime, PlayerStatusManager.Instance.characterStatus);
+            StartCoroutine(CameraBase.Instance.player.GetComponent<PlayerController>().GetBuff((BuffType)bufftype, buffTime, PlayerStatusManager.Instance.characterStatus));
+          
         }
     }
 }

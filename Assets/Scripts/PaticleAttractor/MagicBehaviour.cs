@@ -62,94 +62,48 @@ public class MagicBehaviour : MonoBehaviour
 
     }
 */
-    void Damage(float distance, float angle)
-    {
-        foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
-        {
-            if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
-            {
-                NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
-   
-            }
-        }
-    }
 
-    void Freeze(float buffTime, float distance, float angle)
-    {
-        foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
-        {
-            if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
-            {
-                NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.Freeze,buffTime);
-
-            }
-        }
-    }
-
-    void Blind(float buffTime, float distance, float angle)
-    {
-        foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
-        {
-            if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
-            {
-                if(enemy.Value.name!=NetworkManager.PlayerName)
-                NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName, BuffType.Blind, buffTime);
-            }
-        }
-    }
-
-    void SlowDown(float buffTime, float distance, float angle)
-    {
-        foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
-        {
-            if (player.CheckCanAttack(gameObject, enemy.Value.gameObject, distance, angle))
-            {
-
-                NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName, BuffType.SlowDown, buffTime);
-            }
-        }
-    }
 
     void OnTriggerEnter(Collider collider)
     {
        
         if (isHit)
         {
-            foreach (KeyValuePair<string, NetworkPlayer> enemy in player.ScenePlayers)
+            foreach (KeyValuePair<string, NetworkPlayer> enemy in NetworkPlayerManager.Instance.ScenePlayers)
              {
-                 if(enemy.Value.PlayerName==NetworkManager.PlayerName)
+                 if(enemy.Value.playerName==NetworkManager.PlayerName)
                  {
                      continue;
                  }
                 switch (magicType)
                  {
                     case MagicType.Ripple:
-                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.characterStatus.Defend_Magic / 100));
                     break;
                     case MagicType.HeartAttack:
-                    Damage(3f, 360);
-                    break;
+                        NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.characterStatus.Defend_Magic / 100));
+                        break;
                     case MagicType.IceArrow:
                         float IProbability = ItemInfoManager.Instance.GetItemInfo(603).magicProperties.Probability;
-                         NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                         NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.characterStatus.Defend_Magic / 100));
                         if (Random.value < IProbability)
                         {
-                          NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.Freeze,2);
+                          NetworkManager.SendPlayerGetBuff(enemy.Value.playerName,BuffType.Freeze,2);
                         }
                     break;
                     case MagicType.ChoshimArrow:
                     float CProbability = ItemInfoManager.Instance.GetItemInfo(604).magicProperties.Probability;
-                    NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                    NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.characterStatus.Defend_Magic / 100));
                     if (Random.value < CProbability)
                     {
-                       NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.SlowDown,5);
+                       NetworkManager.SendPlayerGetBuff(enemy.Value.playerName,BuffType.SlowDown,5);
                     }
                     break;
                     case MagicType.StygianDesolator:
-                     NetworkManager.SendPlayerGetBuff(enemy.Value.PlayerName,BuffType.Blind,5);
+                     NetworkManager.SendPlayerGetBuff(enemy.Value.playerName,BuffType.Blind,5);
                     break;
                     case MagicType.Thunderbolt:
-                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.status.Defend_Magic / 100));
+                     NetworkManager.SendPlayerHitSomeone(enemy.Value.name, PlayerStatusManager.Instance.GetCharacterStatus().Attack_Magic * (1 - enemy.Value.characterStatus.Defend_Magic / 100));
                     break;
                  }
                  

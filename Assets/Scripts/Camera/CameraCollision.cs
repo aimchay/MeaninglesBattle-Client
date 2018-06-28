@@ -34,6 +34,8 @@ public class CameraCollision : MonoBehaviour
         }
         transform.localPosition = Vector3.Lerp(transform.localPosition, dir * distance, Time.deltaTime * smooth);
 
+        /*
+        #region
         rayToItem = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(rayToItem, out hitToItem))
         {
@@ -76,7 +78,7 @@ public class CameraCollision : MonoBehaviour
             MessageCenter.Send(Meaningless.EMessageType.FoundItem, false);
             itemTran = null;
         }
-
-       
+        #endregion
+        */
     }
 }

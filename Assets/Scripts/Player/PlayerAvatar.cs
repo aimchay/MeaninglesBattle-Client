@@ -1,67 +1,74 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
+
+using Meaningless;
 
 public class PlayerAvatar : Entity
 {
-    public CharacterController CC;
-
+    public string playerName;
     public CharacterStatus characterStatus;
+    public PlayerController playerController;
+
+
+    private float lastTime;
 
     private void Start()
     {
         animatorMgr = new AnimatorManager(this);
-        CC = GetComponent<CharacterController>();
-        characterStatus = PlayerStatusManager.Instance.GetCharacterStatus();
+        playerController = GetComponent<PlayerController>();
+
+        MessageCenter.AddListener(EMessageType.EquipItem,
+            (object[] obj) =>
+            {
+                switch((EquippedItem)obj[0])
+                {
+                    case EquippedItem.Head:
+                        playerController.UnEquip(EquippedItem.Head);
+                        playerController.EquipHelmet((int)obj[1]);
+                        NetworkManager.SendPlayerEquipHelmet((int)obj[1]); //发送戴头盔消息
+                        break;
+                    case EquippedItem.Body:
+                        playerController.EquipClothes((int)obj[1]);
+                        NetworkManager.SendPlayerEquipClothe((int)obj[1]); //发送着衫消息
+                        break;
+                    case EquippedItem.Weapon1:
+                        playerController.UnEquip(EquippedItem.Weapon1);
+                        playerController.EquipWeapon((int)obj[1]);
+                        NetworkManager.SendPlayerEquipWeapon((int)obj[1]); //发送换武器消息
+                        break;
+                }
+
+                MessageCenter.AddListener(EMessageType.UnEquipItem, 
+                   (object[] ob) =>
+                 {
+                     playerController.UnEquip((EquippedItem)ob[0]);
+                 }
+                );
+            }
+            );
+
+      
     }
 
     private void Update()
     {
-        
+        if (playerController.List_CanPickUp.Count > 0)
+            MessageCenter.Send(EMessageType.FoundItem, true);
+        else
+            MessageCenter.Send(EMessageType.FoundItem, false);
+        characterStatus = PlayerStatusManager.Instance.GetCharacterStatus();
+        animatorMgr.animator.SetInteger("WeaponType", (int)characterStatus.weaponType);
     }
 
     private void FixedUpdate()
     {
-        UseGravity(9.8f);
-    }
-
-    
-
-    public void UseGravity(float Gravity)
-    {
-        Vector3 moveDirection = Vector3.zero;
-        if (!CC.isGrounded)
+        playerController.UseGravity(9.8f);
+        if (Time.time - lastTime > 0.2f)
         {
-            moveDirection.y -= Gravity * Time.fixedDeltaTime;
+            NetworkManager.SendUpdatePlayerTranform(transform.position, transform.rotation.eulerAngles);
+            lastTime = Time.time;
         }
-        else
-            moveDirection = Vector3.zero;
-        CC.Move(moveDirection);
     }
 
-    public void Move(float walkSpeed)
-    {
-        Vector3 moveDirection = Vector3.zero;  
-     
-
-            moveDirection = CameraBase.Instance.transform.right * CrossPlatformInputManager.GetAxis("Horizontal") + Vector3.Scale(CameraBase.Instance.transform.forward, new Vector3(1, 0, 1)).normalized * CrossPlatformInputManager.GetAxis("Vertical");
-           // moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= walkSpeed;
-            CC.Move(moveDirection*Time.fixedDeltaTime);
-        
-    }
-
-    public void Jump(float jumpSpeed)
-    {
-        Vector3 moveDirection = Vector3.zero;
-         moveDirection.y += jumpSpeed;
-        CC.Move(moveDirection * Time.fixedDeltaTime);
-    }
-
-    public void Roll(float rollSpeed)
-    {
-        
-
-    }
 }

@@ -13,7 +13,7 @@ public class AnimatorManager
 
     private BaseSMB[] SMBList;
 
-
+    private float lastTime = 0;
 
     public AnimatorManager(PlayerAvatar player)
     {
@@ -38,8 +38,7 @@ public class AnimatorManager
     
     private void StateEnter(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
     {
-      
-        
+        NetworkManager.SendUpdatePlayerAction(state.fullPathHash);
     }
 
     private void StateExit(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
@@ -49,6 +48,6 @@ public class AnimatorManager
 
     private void StateUpdate(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
     {
-       
+
     }
 }

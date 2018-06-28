@@ -26,7 +26,7 @@ public class SpearAttackState : FSMState
             {
                 if (FSM.controller.CheckCanAttack(FSM.gameObject, enemy.Value.gameObject, attackDistance, 45))
                 {
-                    NetworkManager.SendPlayerHitSomeone(enemy.Value.name, FSM.characterStatus.Attack_Physics * (1 - enemy.Value.status.Defend_Physics / 100));
+                    NetworkManager.SendPlayerHitSomeone(enemy.Value.name, FSM.characterStatus.Attack_Physics * (1 - enemy.Value.characterStatus.Defend_Physics / 100));
 
                     AudioManager.PlaySound2D("Spear").Play();
                 }

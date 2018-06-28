@@ -2,65 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Meaningless;
+using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerController : MeaninglessCharacterController
+public class PlayerController:MonoBehaviour
 {
 
     /// <summary>
     ///  Key:GroundItemID Value:ItemID
     /// </summary>
+
+    public Transform LHand;
+    public Transform RHand;
+    public Transform Head;
+    private CharacterController CC;
     private Dictionary<int, int> Dict_PickUp_Tran = new Dictionary<int, int>();
+    public List<GroundItem> List_CanPickUp = new List<GroundItem>();
 
-    /*
-    public void Equip(int itemID)
+    public void Start()
     {
-        if (itemID != 0)
-        {
-            SingleItemInfo ItemInfo;
-            ItemInfo = ItemInfoManager.Instance.GetItemInfo(itemID);
-            switch (ItemInfo.itemType)
-            {
-                case ItemType.Armor:
-                    switch (ItemInfo.armorProperties.armorType)
-                    {
-                        case ArmorType.NULL:
-                            break;
-                        case ArmorType.Head:
-                            GameObject headRes = ResourcesManager.Instance.GetItem(ItemInfo.ItemName);
-                            GameObject headObj = Instantiate(headRes, Head);
-                            break;
-                        case ArmorType.Body:
-                            GameObject bodyObj = ResourcesManager.Instance.GetItem(ItemInfo.ItemName);
-                            Material clothesMat = bodyObj.GetComponent<MeshRenderer>().sharedMaterial;
-                            GameTool.FindTheChild(gameObject, "Base").GetComponent<SkinnedMeshRenderer>().material = clothesMat;
-                            break;
-                    }
-                    break;
-                case ItemType.Weapon:
-                    if (ItemInfo.weaponProperties.weaponType != WeaponType.Shield)
-                    {
-                        GameObject weaponRes = ResourcesManager.Instance.GetItem(ItemInfo.ItemName);
-                        GameObject RWeapon = Instantiate(weaponRes, RHand);
-                        RWeapon.transform.parent = RHand;
-
-                        if (ItemInfoManager.Instance.GetWeaponWeaponType(itemID) == WeaponType.DoubleHands)
-                        {
-                            GameObject LWeapon = Instantiate(weaponRes, LHand);
-                            LWeapon.transform.parent = LHand;
-                        }
-
-                    }
-                    else
-                    {
-                        GameObject itemRes = ResourcesManager.Instance.GetItem(ItemInfo.ItemName);
-                        GameObject Shield = Instantiate(itemRes, LHand);
-                        Shield.transform.parent = LHand;
-                    }
-                    break;
-            }
-        }
+        CC = GetComponent<CharacterController>();
     }
-    */
 
 
     public void EquipClothes(int itemID)
@@ -165,73 +126,75 @@ public class PlayerController : MeaninglessCharacterController
         }
     }
 
-    public override void Jump(float jumpSpeed)
+
+
+    public void Move(float walkSpeed)
     {
         Vector3 moveDirection = Vector3.zero;
-        if (CC.isGrounded)
-        {
-            moveDirection.y += jumpSpeed * Time.fixedDeltaTime;
-        }
+
+
+        moveDirection = CameraBase.Instance.transform.right * CrossPlatformInputManager.GetAxis("Horizontal") + Vector3.Scale(CameraBase.Instance.transform.forward, new Vector3(1, 0, 1)).normalized * CrossPlatformInputManager.GetAxis("Vertical");
+        // moveDirection = transform.TransformDirection(moveDirection);
+        moveDirection *= walkSpeed;
+        CC.Move(moveDirection * Time.fixedDeltaTime);
+
+    }
+
+    public void Jump(float jumpSpeed)
+    {
+        Vector3 moveDirection = Vector3.zero;
+        moveDirection.y += jumpSpeed;
         CC.Move(moveDirection * Time.fixedDeltaTime);
     }
 
-    public override void Move(float walkSpeed, float jumpSpeed)
+    public void Roll(float rollSpeed)
     {
-        Vector3 moveDirection = Vector3.zero;
-        if (CC.isGrounded)
-        {
-            moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            moveDirection = transform.TransformDirection(moveDirection);
-            moveDirection *= walkSpeed;
-            if (Input.GetButtonDown("Jump"))
-                moveDirection.y += jumpSpeed;
-        }
-        CC.Move(moveDirection * Time.fixedDeltaTime);
+
+
     }
 
-    public override void FallingCtrl(float Speed)
+    public void UseSkill(MagicType magicType)
     {
-        Vector3 moveDirection = Vector3.zero;
-        moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection *= Speed;
-        CC.Move(moveDirection * Time.fixedDeltaTime);
+
     }
 
-    public override void ChangeWeapon(int currentSelected)
-    {
-        switch (currentSelected)
+    /*
+        public override void ChangeWeapon(int currentSelected)
         {
-            case 1:
-                if (PlayerStatusManager.Instance.Weapon1 != null)
-                {
-                    if (PlayerStatusManager.Instance.Weapon2 != null)
-                    {
-                        UnEquip(EquippedItem.Weapon2);
-                    }
-                    EquipWeapon(PlayerStatusManager.Instance.Weapon1.ItemID);
-                }
-                break;
-            case 2:
-                if (PlayerStatusManager.Instance.Weapon2 != null)
-                {
+            switch (currentSelected)
+            {
+                case 1:
                     if (PlayerStatusManager.Instance.Weapon1 != null)
                     {
-                        UnEquip(EquippedItem.Weapon1);
+                        if (PlayerStatusManager.Instance.Weapon2 != null)
+                        {
+                            UnEquip(EquippedItem.Weapon2);
+                        }
+                        EquipWeapon(PlayerStatusManager.Instance.Weapon1.ItemID);
                     }
-                    EquipWeapon(PlayerStatusManager.Instance.Weapon2.ItemID);
-                }
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
+                    break;
+                case 2:
+                    if (PlayerStatusManager.Instance.Weapon2 != null)
+                    {
+                        if (PlayerStatusManager.Instance.Weapon1 != null)
+                        {
+                            UnEquip(EquippedItem.Weapon1);
+                        }
+                        EquipWeapon(PlayerStatusManager.Instance.Weapon2.ItemID);
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+            }
+
         }
+        */
 
-    }
-
+    #region 拾取相关
     public void PickItem(Transform Item)
     {
         GroundItem GItem = Item.GetComponent<GroundItem>();
@@ -239,6 +202,19 @@ public class PlayerController : MeaninglessCharacterController
         Item.SetParent(transform);
         NetworkManager.SendPickItem(GItem.GroundItemID);
         Item.gameObject.SetActive(false);
+
+    }
+
+    public void PickItem()
+    {
+        GroundItem GItem = List_CanPickUp[0];
+        List_CanPickUp.Remove(GItem);
+        Dict_PickUp_Tran.Add(GItem.GroundItemID, GItem.ItemID);
+        GItem.transform.SetParent(transform);
+        NetworkManager.SendPickItem(GItem.GroundItemID);
+        PlayerStatusManager.Instance.PickItem(GItem.ItemID);
+        GItem.gameObject.SetActive(false);
+       
     }
 
     public void DiscardItem(int itemID)
@@ -254,12 +230,11 @@ public class PlayerController : MeaninglessCharacterController
                 GItem.gameObject.SetActive(true);
                 Dict_PickUp_Tran.Remove(GID);
                 break;
-            }
-            
-           
+            }    
         }
     }
 
+    /*
     public override SingleItemInfo GetCurSelectedWeaponInfo()
     {
         SingleItemInfo itemInfo = null;
@@ -312,6 +287,61 @@ public class PlayerController : MeaninglessCharacterController
             return false;
         }
     }
+        */
+    
+    public bool CheckCanPickUp(GameObject center, GameObject Item, float distance, float angle)
+    {
+        float dis = (Item.transform.position - center.transform.position).magnitude;
+        Vector3 relativeVector = Item.transform.position - center.transform.position;
+        float ang = Vector3.Angle(relativeVector, center.transform.forward);
+        if (Item.GetComponent<GroundItem>())
+        {
+            if (dis < distance && ang < angle)
+            {
+                if (!List_CanPickUp.Contains(Item.GetComponent<GroundItem>()))
+                    List_CanPickUp.Add(Item.GetComponent<GroundItem>());
+                return true;
+            }
+            else
+            {
+                if (List_CanPickUp.Contains(Item.GetComponent<GroundItem>()))
+                    List_CanPickUp.Remove(Item.GetComponent<GroundItem>());
+                return false;
+            }
+        }
+        else
+            return false;
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.GetComponent<GroundItem>())
+        {
+            if (!List_CanPickUp.Contains(other.GetComponent<GroundItem>()))
+                List_CanPickUp.Add(other.GetComponent<GroundItem>());
+        }
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<GroundItem>())
+        {
+            if (List_CanPickUp.Contains(other.GetComponent<GroundItem>()))
+                List_CanPickUp.Remove(other.GetComponent<GroundItem>());
+        }
+    }
+
+
+    #endregion
+
+    #region Buff相关
+    public IEnumerator GetBuff(BuffType buffType, float time, CharacterStatus status)
+    {
+        GetBuff(buffType, status);
+
+        yield return new WaitForSeconds(time);
+
+        Losebuff(buffType, status);
+    }
 
     private void GetBuff(BuffType buff, CharacterStatus status)
     {
@@ -361,7 +391,9 @@ public class PlayerController : MeaninglessCharacterController
         }
 
     }
+    #endregion
 
+    /*
     public override void GetDeBuffInTime(BuffType debuff, float time, CharacterStatus status)
     {
         Buff buff = new Buff(debuff, time, status, GetBuff, Losebuff);
@@ -371,8 +403,10 @@ public class PlayerController : MeaninglessCharacterController
             Buff.OnEnter();
         }
     }
+    */
 
-    public override void UseGravity(float Gravity)
+
+    public void UseGravity(float Gravity)
     {
         Vector3 moveDirection = Vector3.zero;
         if (!CC.isGrounded)
@@ -384,38 +418,6 @@ public class PlayerController : MeaninglessCharacterController
         CC.Move(moveDirection);
     }
 
-    protected override void Initialize()
-    {
-        Transform RigPelvis = GameTool.FindTheChild(gameObject, "RigPelvis");
-        LHand = GameTool.FindTheChild(RigPelvis.gameObject, "Dummy Prop Left");
-        RHand = GameTool.FindTheChild(RigPelvis.gameObject, "Dummy Prop Right");
-        Head = GameTool.FindTheChild(RigPelvis.gameObject, "Dummy Prop Head");
-        Wings = GameTool.FindTheChild(gameObject, "Wings");
-    }
 
-    protected override void CCUpdate()
-    {
-        CurrentSelected = PlayerStatusManager.Instance.CurrentSelected;
-        //MessageCenter.Send(EMessageType.CurrentselectedWeapon, CurrentSelected);
 
-        if (buffList.Count > 0)
-        {
-            foreach (Buff buff in buffList)
-            {
-                if (buff.canUpdate)
-                    buff.OnUpdate();
-                if (buff.canDestory)
-                {
-                    buff.OnExit();
-                    buffList.Remove(buff);
-                }
-            }
-        }
-
-    }
-
-    protected override void CCFixedUpdate()
-    {
-        UseGravity(Gravity);
-    }
 }

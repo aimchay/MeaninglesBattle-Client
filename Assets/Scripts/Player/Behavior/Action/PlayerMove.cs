@@ -27,7 +27,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Basic.UnityCharacterController
             
             if (avatar != null)
             {
-                avatar.Move(avatar.characterStatus.moveSpeed);
+                avatar.playerController.Move(avatar.characterStatus.moveSpeed);
                 return TaskStatus.Success;
             }
             else

@@ -502,12 +502,11 @@ GameObject:
   - component: {fileID: 4767247552130254}
   - component: {fileID: 95014117889530798}
   - component: {fileID: 143543580159298868}
-  - component: {fileID: 114622247498669894}
-  - component: {fileID: 114081480928468718}
   - component: {fileID: 114373383458492224}
+  - component: {fileID: 114979478651548210}
   m_Layer: 0
   m_Name: NetPlayerPrefab
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1069,7 +1068,7 @@ Animator:
   m_GameObject: {fileID: 1887132482691962}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 231d45dba8bff13478d80904318e7bc4, type: 3}
-  m_Controller: {fileID: 9100000, guid: 38bd54edb891bdc47bb940de0cfbc816, type: 2}
+  m_Controller: {fileID: 9100000, guid: 5039a110b57452540930cc61a9656c81, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1077,26 +1076,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114081480928468718
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1887132482691962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b6a1845f50aa734b8d1297a30adbe13, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CC: {fileID: 0}
-  Gravity: 9.8
-  CurrentSelected: 1
-  deBuffTime: 0
-  List_CanAttack: []
-  LHand: {fileID: 0}
-  RHand: {fileID: 0}
-  Head: {fileID: 0}
-  Wings: {fileID: 0}
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &114373383458492224
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1108,15 +1088,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ce32eab80e6bc34180f3e7fa8100ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 
   playerController: {fileID: 0}
-  animationManager: {fileID: 0}
-  PlayerName: 
   hp: 100
   headItemID: 0
   bodyItemID: 0
   weaponID: 0
-  currentAction: 
-  status:
+  currentAction: 0
+  characterStatus:
     characterName: 
     weaponType: 0
     magicType: 0
@@ -1130,7 +1109,7 @@ MonoBehaviour:
     Defend_Magic: 0
     DecreaseDurationTime_Magic: 0
   LastUpdateTime: 0
---- !u!114 &114622247498669894
+--- !u!114 &114979478651548210
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1138,14 +1117,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1887132482691962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8447437e297fb2e4890a39f55adc73dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b6a1845f50aa734b8d1297a30adbe13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  animCur: 
-  LayerCur: 0
-  AnimLock: 0
-  AnimStartName: Idle
+  LHand: {fileID: 4921738177980024}
+  RHand: {fileID: 4891569041889810}
+  Head: {fileID: 4210000429702962}
 --- !u!137 &137165593950433346
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
@@ -1159,6 +1136,7 @@ SkinnedMeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 4427b350d87ba9441bf69b2af4cc0238, type: 2}
   - {fileID: 0}

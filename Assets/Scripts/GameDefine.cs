@@ -55,6 +55,9 @@ namespace Meaningless
         EquipItem,
         //脱下物品
         UnEquipItem,
+        //刷新HUD
+        RefreshHUD,
+
         /***************/
         TipsUI,
         PlayerName,

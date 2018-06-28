@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Meaningless;
+using UnityStandardAssets.CrossPlatformInput;
 
 public enum EquippedItem
 {
@@ -15,8 +16,8 @@ public enum EquippedItem
 
 public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
 {
-    public int CurrentSelected = 1;
-    // public Dictionary<EquippedItem, SingleItemInfo> Dict_Equipped=new Dictionary<EquippedItem, SingleItemInfo>();
+    public int CurrentSelected = 0;
+    public Dictionary<EquippedItem, SingleItemInfo> Dict_Equipped=new Dictionary<EquippedItem, SingleItemInfo>();
     public SingleItemInfo Head = new SingleItemInfo();
     public SingleItemInfo HeadGem1 = new SingleItemInfo();
     public SingleItemInfo HeadGem2 = new SingleItemInfo();
@@ -120,6 +121,10 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
         Magic1 = NullInfo;
         Magic2 = NullInfo;
 
+        for(EquippedItem i=EquippedItem.Head; i<EquippedItem.Magic2; i++)
+        {
+            Dict_Equipped.Add(i, NullInfo);
+        }
 
         skillAttributesList[0].skillInfo = new SingleItemInfo();
         skillAttributesList[0].skillInfo.magicProperties = new MagicProperties();
@@ -127,6 +132,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
         skillAttributesList[1].skillInfo.magicProperties = new MagicProperties();
         defaultCharacterStatus = MeaninglessJson.LoadJsonFromFile<CharacterStatus>(MeaninglessJson.Path_StreamingAssets + "CharacterStatus.json");
         characterStatus.HP = defaultCharacterStatus.HP;
+        characterStatus = GetCharacterStatus();
         //MessageCenter.AddListener_Multparam(EMessageType.EquipItem, (object[] obj) => { EquipItem((EquippedItem)obj[0], (SingleItemInfo)obj[1]); });
         MessageCenter.AddListener(EMessageType.UseItem, (object[] obj) => { UseItem((int)obj[0]); });
     }
@@ -134,25 +140,19 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
 
     void Update()
     {
-        if (Input.GetButtonDown("Bar1"))
+        if(CrossPlatformInputManager.GetButtonDown("Fire1")|| CrossPlatformInputManager.GetButtonDown("Fire2"))
         {
             CurrentSelected = 1;
-            player.GetComponent<PlayerController>().ChangeWeapon(1);
         }
-        if (Input.GetButtonDown("Bar2"))
-        {
-            CurrentSelected = 2;
-            player.GetComponent<PlayerController>().ChangeWeapon(2);
-        }
-        if (Input.GetButtonDown("Bar3"))
+        if(CrossPlatformInputManager.GetButtonDown("LB"))
         {
             CurrentSelected = 3;
-
         }
-        if (Input.GetButtonDown("Bar4"))
+        if(CrossPlatformInputManager.GetButtonDown("RB"))
         {
             CurrentSelected = 4;
         }
+
         if (healFlag)
         {
             if (RecoveryValue > 0)
@@ -558,7 +558,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
             default:
                 break;
         }
-
+        MessageCenter.Send(EMessageType.EquipItem, equippedItem, itemInfo.ItemID);
 
 
     }
@@ -595,6 +595,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
                 }
 
                 Head = NullInfo;
+                MessageCenter.Send(EMessageType.UnEquipItem, equippedItem);
                 break;
             case EquippedItem.HeadGem1:
                 if (Head != NullInfo)
@@ -621,6 +622,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
                     armorAttributes.rate_Recovery -= HeadGem2.gemProperties.Rate_Recovery;
                 }
                 HeadGem2 = NullInfo;
+
                 break;
             case EquippedItem.Body:
                 //当身体防具脱下，身体防具上的宝石将不再生效
@@ -652,6 +654,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
                 armorAttributes.rate_Recovery -= Body.armorProperties.Rate_Recovery;
 
                 Body = NullInfo;
+                MessageCenter.Send(EMessageType.UnEquipItem, equippedItem);
                 break;
             case EquippedItem.BodyGem1:
                 if (Body != NullInfo)
@@ -724,9 +727,11 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
 
             case EquippedItem.Weapon1:
                 Weapon1 = NullInfo;
+                MessageCenter.Send(EMessageType.UnEquipItem, equippedItem);
                 break;
             case EquippedItem.Weapon2:
                 Weapon2 = NullInfo;
+                MessageCenter.Send(EMessageType.UnEquipItem, equippedItem);
                 break;
             case EquippedItem.Magic1:
                 skillAttributesList[0].skillInfo = NullInfo;
@@ -739,6 +744,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
                 Magic2 = NullInfo;
                 break;
         }
+
     }
 
     /// <summary>
@@ -842,7 +848,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
 
             case 3:
                 characterStatus.magicType = Magic1.magicProperties.magicType;
-                characterStatus.weaponType = WeaponType.NULL;
+                characterStatus.weaponType = WeaponType.Magic;
 
                 characterStatus.Attack_Physics = 0;
 
@@ -863,7 +869,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
             case 4:
                 //characterStatus.weaponType = Magic2.weaponProperties.weaponType;
                 characterStatus.magicType = Magic2.magicProperties.magicType;
-                characterStatus.weaponType = WeaponType.NULL;
+                characterStatus.weaponType = WeaponType.Magic;
 
                 characterStatus.Attack_Physics = 0;
 
@@ -916,7 +922,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
 
         characterStatus.Defend_Physics = defaultCharacterStatus.Defend_Physics + armorAttributes.rate_Defend_Physics;
 
-        characterStatus.moveSpeed = defaultCharacterStatus.moveSpeed + (defaultCharacterStatus.moveSpeed * armorAttributes.rate_MoveSpeed);
+        characterStatus.moveSpeed = defaultCharacterStatus.moveSpeed+ (defaultCharacterStatus.moveSpeed * armorAttributes.rate_MoveSpeed);
 
         characterStatus.RecoveryValue = defaultCharacterStatus.RecoveryValue + armorAttributes.rate_Recovery;
         return characterStatus;

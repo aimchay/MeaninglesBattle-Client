@@ -136,20 +136,28 @@ public class NetworkManager : MonoSingleton<NetworkManager>
     /// <summary>
     /// 发送角色同步信息
     /// </summary>
-    public static void SendUpdatePlayerInfo(Vector3 pos , Vector3 rot, string CurrentAction)
+    public static void SendUpdatePlayerTranform(Vector3 pos , Vector3 rot)
     {
         BytesProtocol protocol = new BytesProtocol();
-        protocol.SpliceString("UpdatePlayerInfo");
+        protocol.SpliceString("UpdatePlayerTranform");
         protocol.SpliceFloat(pos.x);
         protocol.SpliceFloat(pos.y);
         protocol.SpliceFloat(pos.z);
         protocol.SpliceFloat(rot.x);
         protocol.SpliceFloat(rot.y);
         protocol.SpliceFloat(rot.z);
-       
-        protocol.SpliceString(CurrentAction);
+
         Send(protocol);
-    }                      
+    }
+
+
+    public static void SendUpdatePlayerAction(int CurrentAction)
+    {
+        BytesProtocol protocol = new BytesProtocol();
+        protocol.SpliceString("UpdatePlayerAction");
+        protocol.SpliceInt(CurrentAction);
+        Send(protocol);
+    }
     
     /// <summary>
     /// 发送拾取物品消息

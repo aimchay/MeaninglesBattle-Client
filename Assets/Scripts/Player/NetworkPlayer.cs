@@ -7,17 +7,18 @@ using MeaninglessNetwork;
 
 public class NetworkPlayer : MonoBehaviour {
 
-    
+    public string playerName;
     public PlayerController playerController;
-    public AnimationManager animationManager;
+    private Animator animator;
+    //public AnimationManager animationManager;
 
-    public string PlayerName="";
+    //public string PlayerName="";
     public float hp = 100f;
     public int headItemID;
     public int bodyItemID;
     public int weaponID;
-    public string currentAction;
-    public CharacterStatus status;
+    public int currentAction;
+    public CharacterStatus characterStatus;
     
 
     #region 记录上一次刷新的变量
@@ -31,17 +32,17 @@ public class NetworkPlayer : MonoBehaviour {
     private float DeltaTime;
     #endregion
 
-
-    private void Start()
+    public void Start()
     {
         playerController = GetComponent<PlayerController>();
-        animationManager = GetComponent<AnimationManager>();
+        animator = GetComponent<Animator>();
     }
+
 
     /// <summary>
     /// 设置玩家变换数据与更新时间
     /// </summary>
-    public void SetPlayerTransform(float posX,float posY,float posZ,float rotX,float rotY,float rotZ)
+    public void SetPlayerTransform(float posX,float posY,float posZ,float rotX,float rotY,float rotZ,float HP)
     {
         Vector3 recvPos = new Vector3(posX,posY,posZ);
         Vector3 recvRot = new Vector3(rotX, rotY, rotZ);
@@ -57,20 +58,21 @@ public class NetworkPlayer : MonoBehaviour {
         lastPos = recvPos;
         lastRot = recvRot;
 
-
+        hp = HP;
         //刷新更新时间
         LastUpdateTime = Time.time;
     }
 
     /// <summary>
-    /// 设置玩家状态信息,生命值,头盔物品ID,当前动画名称等
+    /// 设置当前动画Hash等
     /// </summary>
-    public void SetPlayerInfo(float HP,string CurrentAction)
+    public void SetPlayerAction(int CurrentAction)
     {
-        hp = HP;
+
         Debug.Log(CurrentAction);
         currentAction = CurrentAction;
-        animationManager.NetPlayClip(CurrentAction);
+       animator.Play(currentAction);
+        //animationManager.NetPlayClip(CurrentAction);
     }
 
     /// <summary>
@@ -105,7 +107,7 @@ public class NetworkPlayer : MonoBehaviour {
     /// </summary>
     public void SetPlayerName(string playerName)
     {
-        PlayerName = playerName;
+        this.playerName = playerName;
     }
 
     /// <summary>
@@ -124,37 +126,42 @@ public class NetworkPlayer : MonoBehaviour {
         protocol.SpliceFloat(transform.rotation.y);
         protocol.SpliceFloat(transform.rotation.z);
 
-        if(PlayerStatusManager.Instance.Head==null)
+        if (playerName == NetworkManager.PlayerName)
         {
-            protocol.SpliceInt(0);
-        }
-        else
-        {
-            protocol.SpliceInt(PlayerStatusManager.Instance.Head.ItemID);
-        }
+            if (PlayerStatusManager.Instance.Head == null)
+            {
+                protocol.SpliceInt(0);
+            }
+            else
+            {
+                protocol.SpliceInt(PlayerStatusManager.Instance.Head.ItemID);
+            }
 
-        if (PlayerStatusManager.Instance.Body == null)
-        {
-            protocol.SpliceInt(0);
-        }
-        else
-        {
-            protocol.SpliceInt(PlayerStatusManager.Instance.Body.ItemID);
-        }
-        if (PlayerStatusManager.Instance.Weapon1 == null && PlayerStatusManager.Instance.Weapon2 == null)
-        {
-            protocol.SpliceInt(0);
-        }
-        else
-        {
-            protocol.SpliceInt(PlayerStatusManager.Instance.Body .ItemID);
-        }
+            if (PlayerStatusManager.Instance.Body == null)
+            {
+                protocol.SpliceInt(0);
+            }
+            else
+            {
+                protocol.SpliceInt(PlayerStatusManager.Instance.Body.ItemID);
+            }
+            if (PlayerStatusManager.Instance.Weapon1 == null && PlayerStatusManager.Instance.Weapon2 == null)
+            {
+                protocol.SpliceInt(0);
+            }
+            else
+            {
+                protocol.SpliceInt(PlayerStatusManager.Instance.Body.ItemID);
+            }
 
-        // protocol.SpliceInt(WeaponID);
-        // protocol.SpliceString(CurrentAction);
+            // protocol.SpliceInt(WeaponID);
+            // protocol.SpliceString(CurrentAction);
 
-        //playerFSM.characterStatus.HP;
-        status = PlayerStatusManager.Instance.characterStatus;
+            //playerFSM.characterStatus.HP;
+
+            characterStatus = PlayerStatusManager.Instance.characterStatus;
+        }
+        
 
         return protocol;
     }
