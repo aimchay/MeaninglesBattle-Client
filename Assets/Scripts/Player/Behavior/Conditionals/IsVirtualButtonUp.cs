@@ -14,7 +14,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Basic.UnityInput
 
         public override TaskStatus OnUpdate()
         {
-            return CrossPlatformInputManager.GetButtonDown(buttonName.Value) ? TaskStatus.Success : TaskStatus.Failure;
+            return CrossPlatformInputManager.GetButtonUp(buttonName.Value) ? TaskStatus.Success : TaskStatus.Failure;
         }
 
         public override void OnReset()

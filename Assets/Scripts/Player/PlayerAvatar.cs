@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 using Meaningless;
+using BehaviorDesigner.Runtime;
 
 public class PlayerAvatar : Entity
 {
@@ -10,6 +10,7 @@ public class PlayerAvatar : Entity
     public CharacterStatus characterStatus;
     public PlayerController playerController;
 
+    public BehaviorTree behaviorTree;
 
     private float lastTime;
 
@@ -17,6 +18,7 @@ public class PlayerAvatar : Entity
     {
         animatorMgr = new AnimatorManager(this);
         playerController = GetComponent<PlayerController>();
+        behaviorTree = GetComponent<BehaviorTree>();
 
         MessageCenter.AddListener(EMessageType.EquipItem,
             (object[] obj) =>
@@ -59,6 +61,7 @@ public class PlayerAvatar : Entity
             MessageCenter.Send(EMessageType.FoundItem, false);
         characterStatus = PlayerStatusManager.Instance.GetCharacterStatus();
         animatorMgr.animator.SetInteger("WeaponType", (int)characterStatus.weaponType);
+        behaviorTree.SendEvent<int>("MagicType", (int)characterStatus.magicType);
     }
 
     private void FixedUpdate()

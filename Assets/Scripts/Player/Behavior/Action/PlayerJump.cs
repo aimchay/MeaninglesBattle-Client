@@ -27,7 +27,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Basic.UnityCharacterController
 
             if (avatar != null)
             {
-                avatar.playerController.Jump(avatar.characterStatus.jumpSpeed);
+                //avatar.playerController.Jump(avatar.characterStatus.jumpSpeed);
+                avatar.animatorMgr.animator.SetBool("Jump", true);
                 return TaskStatus.Success;
             }
             else

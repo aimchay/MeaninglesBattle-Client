@@ -24,122 +24,6 @@ public class PlayerController:MonoBehaviour
     }
 
 
-    public void EquipClothes(int itemID)
-    {
-        string itemName = ItemInfoManager.Instance.GetResname(itemID);
-
-        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
-        Material clothesMat = itemObj.GetComponent<MeshRenderer>().sharedMaterial;
-        GameTool.FindTheChild(gameObject, "Base").GetComponent<SkinnedMeshRenderer>().material = clothesMat;
-
-    }
-
-    public void EquipHelmet(int itemID)
-    {
-        string itemName = ItemInfoManager.Instance.GetResname(itemID);
-        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
-        GameObject RWeapon = Instantiate(itemObj, Head);
-    }
-
-
-    public void EquipWeapon(int itemID)
-    {
-
-        string itemName = ItemInfoManager.Instance.GetResname(itemID);
-        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
-        Debug.Log(itemObj);
-        GameObject RWeapon = Instantiate(itemObj, RHand);
-        RWeapon.transform.parent = RHand;
-
-        if (ItemInfoManager.Instance.GetWeaponWeaponType(itemID) == WeaponType.DoubleHands)
-        {
-            GameObject LWeapon = Instantiate(itemObj, LHand);
-            LWeapon.transform.parent = LHand;
-        }
-
-    }
-
-    public void EquipShield(int itemID)
-    {
-        string itemName = ItemInfoManager.Instance.GetResname(itemID);
-        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
-        GameObject Shield = Instantiate(itemObj, LHand);
-        Shield.transform.parent = LHand;
-    }
-
-
-
-    public void UnEquip(EquippedItem equippedItem)
-    {
-        switch (equippedItem)
-        {
-            case EquippedItem.Head:
-                if (Head.childCount != 0)
-                {
-                    GameObject preHead = Head.GetChild(0).gameObject;
-                    Destroy(preHead);
-                }
-                break;
-            case EquippedItem.Body:
-                GameObject itemObj = ResourcesManager.Instance.GetItem("Armor_Casual");
-                Material clothesMat = itemObj.GetComponent<MeshRenderer>().sharedMaterial;
-                GameTool.FindTheChild(gameObject, "Base").GetComponent<SkinnedMeshRenderer>().material = clothesMat;
-                break;
-            case EquippedItem.Weapon1:
-                if ((RHand.childCount != 0))
-                {
-                    GameObject preWeapon1 = RHand.GetChild(0).gameObject;
-                    string preWeaponName = preWeapon1.name;
-                    //销毁
-                    Destroy(preWeapon1);
-                    if (LHand.childCount != 0)
-                        if (LHand.GetChild(0).name == preWeaponName)
-                        {
-                            //销毁
-                            Destroy(LHand.GetChild(0).gameObject);
-                        }
-                }
-                break;
-            case EquippedItem.Weapon2:
-                if (RHand.childCount != 0)
-                {
-                    GameObject preWeapon2 = RHand.GetChild(0).gameObject;
-                    string preWeaponName = preWeapon2.name;
-                    //销毁
-                    Destroy(preWeapon2);
-                    if (LHand.childCount != 0)
-                        if (LHand.GetChild(0).name == preWeaponName)
-                        {
-                            //销毁
-                            Destroy(LHand.GetChild(0).gameObject);
-                        }
-                }
-                break;
-            case EquippedItem.Shield:
-                if (LHand.childCount != 0)
-                {
-                    GameObject preShield = LHand.GetChild(0).gameObject;
-                    //销毁
-                    Destroy(preShield);
-                }
-                break;
-        }
-    }
-
-
-
-    public void Move(float walkSpeed)
-    {
-        Vector3 moveDirection = Vector3.zero;
-
-
-        moveDirection = CameraBase.Instance.transform.right * CrossPlatformInputManager.GetAxis("Horizontal") + Vector3.Scale(CameraBase.Instance.transform.forward, new Vector3(1, 0, 1)).normalized * CrossPlatformInputManager.GetAxis("Vertical");
-        // moveDirection = transform.TransformDirection(moveDirection);
-        moveDirection *= walkSpeed;
-        CC.Move(moveDirection * Time.fixedDeltaTime);
-
-    }
-
     public void Jump(float jumpSpeed)
     {
         Vector3 moveDirection = Vector3.zero;
@@ -393,18 +277,125 @@ public class PlayerController:MonoBehaviour
     }
     #endregion
 
-    /*
-    public override void GetDeBuffInTime(BuffType debuff, float time, CharacterStatus status)
+    #region 穿戴相关
+
+    public void EquipClothes(int itemID)
     {
-        Buff buff = new Buff(debuff, time, status, GetBuff, Losebuff);
-        buffList.Add(buff);
-        foreach (Buff Buff in buffList)
+        string itemName = ItemInfoManager.Instance.GetResname(itemID);
+
+        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
+        Material clothesMat = itemObj.GetComponent<MeshRenderer>().sharedMaterial;
+        GameTool.FindTheChild(gameObject, "Base").GetComponent<SkinnedMeshRenderer>().material = clothesMat;
+
+    }
+
+    public void EquipHelmet(int itemID)
+    {
+        string itemName = ItemInfoManager.Instance.GetResname(itemID);
+        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
+        GameObject RWeapon = Instantiate(itemObj, Head);
+    }
+
+
+    public void EquipWeapon(int itemID)
+    {
+
+        string itemName = ItemInfoManager.Instance.GetResname(itemID);
+        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
+        Debug.Log(itemObj);
+        GameObject RWeapon = Instantiate(itemObj, RHand);
+        RWeapon.transform.parent = RHand;
+
+        if (ItemInfoManager.Instance.GetWeaponWeaponType(itemID) == WeaponType.DoubleHands)
         {
-            Buff.OnEnter();
+            GameObject LWeapon = Instantiate(itemObj, LHand);
+            LWeapon.transform.parent = LHand;
+        }
+
+    }
+
+    public void EquipShield(int itemID)
+    {
+        string itemName = ItemInfoManager.Instance.GetResname(itemID);
+        GameObject itemObj = ResourcesManager.Instance.GetItem(itemName);
+        GameObject Shield = Instantiate(itemObj, LHand);
+        Shield.transform.parent = LHand;
+    }
+
+
+
+    public void UnEquip(EquippedItem equippedItem)
+    {
+        switch (equippedItem)
+        {
+            case EquippedItem.Head:
+                if (Head.childCount != 0)
+                {
+                    GameObject preHead = Head.GetChild(0).gameObject;
+                    Destroy(preHead);
+                }
+                break;
+            case EquippedItem.Body:
+                GameObject itemObj = ResourcesManager.Instance.GetItem("Armor_Casual");
+                Material clothesMat = itemObj.GetComponent<MeshRenderer>().sharedMaterial;
+                GameTool.FindTheChild(gameObject, "Base").GetComponent<SkinnedMeshRenderer>().material = clothesMat;
+                break;
+            case EquippedItem.Weapon1:
+                if ((RHand.childCount != 0))
+                {
+                    GameObject preWeapon1 = RHand.GetChild(0).gameObject;
+                    string preWeaponName = preWeapon1.name;
+                    //销毁
+                    Destroy(preWeapon1);
+                    if (LHand.childCount != 0)
+                        if (LHand.GetChild(0).name == preWeaponName)
+                        {
+                            //销毁
+                            Destroy(LHand.GetChild(0).gameObject);
+                        }
+                }
+                break;
+            case EquippedItem.Weapon2:
+                if (RHand.childCount != 0)
+                {
+                    GameObject preWeapon2 = RHand.GetChild(0).gameObject;
+                    string preWeaponName = preWeapon2.name;
+                    //销毁
+                    Destroy(preWeapon2);
+                    if (LHand.childCount != 0)
+                        if (LHand.GetChild(0).name == preWeaponName)
+                        {
+                            //销毁
+                            Destroy(LHand.GetChild(0).gameObject);
+                        }
+                }
+                break;
+            case EquippedItem.Shield:
+                if (LHand.childCount != 0)
+                {
+                    GameObject preShield = LHand.GetChild(0).gameObject;
+                    //销毁
+                    Destroy(preShield);
+                }
+                break;
         }
     }
-    */
 
+
+
+    public void Move(float walkSpeed)
+    {
+        Vector3 moveDirection = Vector3.zero;
+
+
+        moveDirection = CameraBase.Instance.transform.right * CrossPlatformInputManager.GetAxis("Horizontal") + Vector3.Scale(CameraBase.Instance.transform.forward, new Vector3(1, 0, 1)).normalized * CrossPlatformInputManager.GetAxis("Vertical");
+        // moveDirection = transform.TransformDirection(moveDirection);
+        moveDirection *= walkSpeed;
+        CC.Move(moveDirection * Time.fixedDeltaTime);
+
+    }
+
+    #endregion
 
     public void UseGravity(float Gravity)
     {

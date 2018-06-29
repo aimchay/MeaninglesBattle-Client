@@ -1071,7 +1071,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 5039a110b57452540930cc61a9656c81, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
@@ -1123,6 +1123,7 @@ MonoBehaviour:
   LHand: {fileID: 4921738177980024}
   RHand: {fileID: 4891569041889810}
   Head: {fileID: 4210000429702962}
+  List_CanPickUp: []
 --- !u!137 &137165593950433346
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
