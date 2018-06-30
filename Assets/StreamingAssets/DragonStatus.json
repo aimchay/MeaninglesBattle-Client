@@ -1,0 +1,11 @@
+{
+    "moveSpeed": 5,
+    "jumpSpeed": 10,
+    "HP": 100,
+    "Attack_Physics": 10,
+    "Attack_Magic": 15,
+    "RecoveryValue": 0,
+    "Defend_Physics": 0,
+    "Defend_Magic": 0,
+    "DecreaseDurationTime_Magic": 1
+  }
