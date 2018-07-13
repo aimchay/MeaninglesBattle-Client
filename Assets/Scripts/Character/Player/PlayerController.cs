@@ -4,7 +4,7 @@ using UnityEngine;
 using Meaningless;
 using UnityStandardAssets.CrossPlatformInput;
 
-public class PlayerController:MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     /// <summary>
@@ -39,7 +39,46 @@ public class PlayerController:MonoBehaviour
 
     public void UseSkill(MagicType magicType)
     {
+        switch (magicType)
+        {
+            case MagicType.Ripple:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic(magicType.ToString(), transform.position + new Vector3(0, 1, 0), transform.rotation);
+                else
+                    NetPoolManager.Instantiate(magicType.ToString(), transform.position + new Vector3(0, 1, 0), transform.rotation);
+                break;
+            case MagicType.HeartAttack:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic("Heart Attack", transform.position + new Vector3(0, 1, 0), transform.rotation);
+                else
+                    NetPoolManager.Instantiate("Heart Attack", transform.position + new Vector3(0, 1, 0), transform.rotation);
+                break;
+            case MagicType.StygianDesolator:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic("Stygian Desolator", transform.position, transform.rotation);
+                else
+                    NetPoolManager.Instantiate("Stygian Desolator", transform.position, transform.rotation);
+                break;
+            case MagicType.IceArrow:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic("Ice Arrow", RHand.position, transform.rotation);
+                else
+                    NetPoolManager.Instantiate("Stygian Desolator", transform.position, transform.rotation);
+                break;
+            case MagicType.ChoshimArrow:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic("Choshim Arrow", RHand.position, transform.rotation);
+                else
+                    NetPoolManager.Instantiate("Choshim Arrow", RHand.position, transform.rotation);
+                break;
+            case MagicType.Thunderbolt:
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendPlayerMagic(magicType.ToString(), transform.position + transform.forward * 5, transform.rotation);
+                else
+                    NetPoolManager.Instantiate(magicType.ToString(), transform.position + transform.forward * 5, transform.rotation);
+                break;
 
+        }
     }
 
     /*
@@ -84,7 +123,8 @@ public class PlayerController:MonoBehaviour
         GroundItem GItem = Item.GetComponent<GroundItem>();
         Dict_PickUp_Tran.Add(GItem.GroundItemID, GItem.ItemID);
         Item.SetParent(transform);
-        NetworkManager.SendPickItem(GItem.GroundItemID);
+        if (!ResourcesManager.Instance.IsStandalone)
+            NetworkManager.SendPickItem(GItem.GroundItemID);
         Item.gameObject.SetActive(false);
 
     }
@@ -95,28 +135,32 @@ public class PlayerController:MonoBehaviour
         List_CanPickUp.Remove(GItem);
         Dict_PickUp_Tran.Add(GItem.GroundItemID, GItem.ItemID);
         GItem.transform.SetParent(transform);
-        NetworkManager.SendPickItem(GItem.GroundItemID);
+        if (!ResourcesManager.Instance.IsStandalone)
+            NetworkManager.SendPickItem(GItem.GroundItemID);
         PlayerStatusManager.Instance.PickItem(GItem.ItemID);
         GItem.gameObject.SetActive(false);
-       
+
     }
 
     public void DiscardItem(int itemID)
     {
         foreach (int GID in Dict_PickUp_Tran.Keys)
         {
-            if(Dict_PickUp_Tran[GID]==itemID)
+            if (Dict_PickUp_Tran[GID] == itemID)
             {
                 GroundItem GItem = MapManager.Instance.Items[GID];
                 //发送
-                NetworkManager.SendDropItem(GID, GItem.gameObject.transform);
+                if (!ResourcesManager.Instance.IsStandalone)
+                    NetworkManager.SendDropItem(GID, GItem.gameObject.transform);
                 GItem.gameObject.transform.SetParent(null);
                 GItem.gameObject.SetActive(true);
                 Dict_PickUp_Tran.Remove(GID);
                 break;
-            }    
+            }
         }
     }
+
+
 
     /*
     public override SingleItemInfo GetCurSelectedWeaponInfo()
@@ -144,35 +188,9 @@ public class PlayerController:MonoBehaviour
     }
 
 
-    /// <summary>
-    /// 检测敌人是否处于攻击范围
-    /// </summary>
-    /// <param name="center"></param>
-    /// <param name="enemy"></param>
-    /// <param name="distance"></param>
-    /// <param name="angle"></param>
-    /// <returns></returns>
-    public override bool CheckCanAttack(GameObject center, GameObject enemy, float distance, float angle)
-    {
-        float dis = (enemy.transform.position - center.transform.position).magnitude;
-        Vector3 relativeVector = enemy.transform.position - center.transform.position;
-        float ang = Vector3.Angle(relativeVector, center.transform.forward);
 
-        if (dis < distance && ang < angle)
-        {
-            if (!List_CanAttack.Contains(enemy.GetComponent<NetworkPlayer>()))
-                List_CanAttack.Add(enemy.GetComponent<NetworkPlayer>());
-            return true;
-        }
-        else
-        {
-            if (List_CanAttack.Contains(enemy.GetComponent<NetworkPlayer>()))
-                List_CanAttack.Remove(enemy.GetComponent<NetworkPlayer>());
-            return false;
-        }
-    }
         */
-    
+
     public bool CheckCanPickUp(GameObject center, GameObject Item, float distance, float angle)
     {
         float dis = (Item.transform.position - center.transform.position).magnitude;
@@ -195,11 +213,12 @@ public class PlayerController:MonoBehaviour
         }
         else
             return false;
+
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<GroundItem>())
+        if (other.GetComponent<GroundItem>())
         {
             if (!List_CanPickUp.Contains(other.GetComponent<GroundItem>()))
                 List_CanPickUp.Add(other.GetComponent<GroundItem>());
@@ -216,6 +235,38 @@ public class PlayerController:MonoBehaviour
 
 
     #endregion
+
+    /*
+    /// <summary>
+    /// 检测敌人是否处于攻击范围
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="enemy"></param>
+    /// <param name="distance"></param>
+    /// <param name="angle"></param>
+    /// <returns></returns>
+    public  bool CheckCanAttack(GameObject center, GameObject enemy, float distance, float angle)
+    {
+        float dis = (enemy.transform.position - center.transform.position).magnitude;
+        Vector3 relativeVector = enemy.transform.position - center.transform.position;
+        float ang = Vector3.Angle(relativeVector, center.transform.forward);
+
+        if (dis < distance && ang < angle)
+        {
+            if (!List_CanAttack.Contains(enemy.GetComponent<NetworkPlayer>()))
+                List_CanAttack.Add(enemy.GetComponent<NetworkPlayer>());
+            return true;
+        }
+        else
+        {
+            if (List_CanAttack.Contains(enemy.GetComponent<NetworkPlayer>()))
+                List_CanAttack.Remove(enemy.GetComponent<NetworkPlayer>());
+            return false;
+        }
+    }*/
+
+
+
 
     #region Buff相关
     public IEnumerator GetBuff(BuffType buffType, float time, CharacterStatus status)

@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 using Meaningless;
+using UnityEngine.SceneManagement;
+
 public class FinishUI : BaseUI
 {
     //AutoStatement
@@ -28,8 +30,8 @@ public class FinishUI : BaseUI
 
     private void OnBackBtnClick()
     {
-        UIManager.Instance.ShowUI(UIid.MainUI);
-        UIManager.Instance.HideTheUI(UIid.FinishUI,() => { });
+        UIManager.Instance.ShowUI(UIid.RoomUI);
+        UIManager.Instance.HideTheUI(UIid.FinishUI,() => { });       
     }
 
     private void SetData(object[] objs)

@@ -1376,15 +1376,15 @@ MonoBehaviour:
       types: []
       parentIndex: 
       startIndex: 
-      variableStartIndex: 00000000
+      variableStartIndex: 
       JSONSerialization: 
       fieldSerializationData:
         typeName: []
-        fieldNameHash: f9be55564aaa52567707a104921411ab
-        startIndex: 00000000010000000200000003000000
-        dataPosition: 00000000220000002c0000002d000000
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
         unityObjects: []
-        byteData: 4265686176696f7244657369676e65722e52756e74696d652e536861726564496e74576561706f6e547970650100000000
+        byteData: 
         byteDataArray: 
       Version: 1.5.12
 --- !u!114 &114137736292288580
@@ -1429,6 +1429,7 @@ MonoBehaviour:
     DecreaseDurationTime_Magic: 0
   playerController: {fileID: 0}
   behaviorTree: {fileID: 0}
+  IsDefend: 0
 --- !u!135 &135325068866854688
 SphereCollider:
   m_ObjectHideFlags: 1

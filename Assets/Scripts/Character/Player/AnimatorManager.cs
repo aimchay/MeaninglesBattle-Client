@@ -34,20 +34,42 @@ public class AnimatorManager
                 smb.Init(player);
 
         }
-    }    
-    
+    }
+
+    #region 动作事件
     private void StateEnter(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
     {
-        NetworkManager.SendUpdatePlayerAction(state.fullPathHash);
+        if (state.IsName("StygianDesolator"))
+            player.playerController.UseSkill(MagicType.StygianDesolator);
     }
 
     private void StateExit(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
     {
-        
+        if (layerIndex == 5)
+            if (!state.IsName("Empty"))
+            {
+                player.CheckCanAttack(1.5f + PlayerStatusManager.Instance.Weapon1.weaponProperties.weaponLength, 60);
+            }
+        if(layerIndex==4)
+        {
+            if (state.IsName("Ripple"))
+                player.playerController.UseSkill(MagicType.Ripple);
+            if (state.IsName("HeartAttack"))
+                player.playerController.UseSkill(MagicType.HeartAttack);
+            if (state.IsName("Thunderbolt"))
+                player.playerController.UseSkill(MagicType.Thunderbolt);
+            if (state.IsName("IceArrow"))
+                player.playerController.UseSkill(MagicType.IceArrow);
+            if (state.IsName("ChoshimArrow"))
+                player.playerController.UseSkill(MagicType.ChoshimArrow);
+        }
     }
 
     private void StateUpdate(StateActionDispatcher owner, AnimatorStateInfo state, int layerIndex)
     {
-
+      
     }
+    #endregion
+
+  
 }

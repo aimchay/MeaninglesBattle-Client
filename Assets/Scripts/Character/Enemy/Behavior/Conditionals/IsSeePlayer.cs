@@ -22,7 +22,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Enemy
 
         public override TaskStatus OnUpdate()
         {
-            return enemy.FindTarget() ? TaskStatus.Success : TaskStatus.Failure;
+            return enemy.FindTarget()&&!enemy.CanAttack() ? TaskStatus.Success : TaskStatus.Failure;
         }
 
     }

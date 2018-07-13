@@ -16,9 +16,10 @@ namespace Meaningless
 		,LoginUI
 		,RoomUI
 		,TipsUI
-		,Canvas
+		,CanvasUI
 		,FinishUI
         ,EscapeUI
+        ,StartUI
 		/*UIIDHere*/
 
     }
@@ -128,9 +129,10 @@ namespace Meaningless
 			{UIid.LoginUI,"UIPrefab/LoginUI"},
 			{UIid.RoomUI,"UIPrefab/RoomUI"},
 			{UIid.TipsUI,"UIPrefab/TipsUI"},
-			{UIid.Canvas,"UIPrefab/Canvas"},
+			{UIid.CanvasUI,"UIPrefab/Canvas"},
 			{UIid.FinishUI,"UIPrefab/FinishUI"},
             {UIid.EscapeUI,"UIPrefab/EscapeUI" },
+            {UIid.StartUI,"UIPrefab/StartUI" }
 			/*UIDictHere*/
                        
 
@@ -161,7 +163,7 @@ namespace Meaningless
 				case UIid.TipsUI:
 					 scriptType=typeof(TipsUI);
 					break;
-				case UIid.Canvas:
+				case UIid.CanvasUI:
 					 scriptType=typeof(Canvas);
 					break;
 				case UIid.FinishUI:
@@ -169,6 +171,9 @@ namespace Meaningless
 					break;
                 case UIid.EscapeUI:
                     scriptType = typeof(EscapeUI);
+                    break;
+                case UIid.StartUI:
+                    scriptType = typeof(StartUI);
                     break;
                 /*SwitchUIScriptType*/
                 case UIid.NullUI:

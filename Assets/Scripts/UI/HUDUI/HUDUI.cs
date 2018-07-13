@@ -53,8 +53,8 @@ public class HUDUI : BaseUI
         Img_Skill2_Mask = GameTool.GetTheChildComponent<Image>(Img_Skill2.gameObject, "Ing_Skill2_Mask");
         Img_Shield = GameTool.GetTheChildComponent<Image>(this.gameObject, "Img_Shield");
         Img_FrontSight = GameTool.GetTheChildComponent<Image>(gameObject, "Img_FrontSight");
-        Text_Skill1_Count = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Count3");
-        Text_Skill2_Count = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Count4");
+        Text_Skill1_Count = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Count1");
+        Text_Skill2_Count = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Count2");
         Slider_HP = GameTool.GetTheChildComponent<Slider>(this.gameObject, "Slider");
         Text_Remain = GameTool.GetTheChildComponent<Text>(this.gameObject, "Text_Remain");
         Text_Time = GameTool.GetTheChildComponent<Text>(gameObject, "TextTime");
@@ -86,7 +86,7 @@ public class HUDUI : BaseUI
 
     private void Update()
     {
-        Img_FrontSight.rectTransform.position= new Vector2(Screen.width / 2, Screen.height / 2);
+        
     }
 
     protected override void InitDataOnAwake()
@@ -153,7 +153,7 @@ public class HUDUI : BaseUI
 
     private void AwakePickUpTip(object[] Active)
     {
-        Debug.Log((bool)Active[0]);
+
         Img_PickUpTip.gameObject.SetActive((bool)Active[0]);
     }
 

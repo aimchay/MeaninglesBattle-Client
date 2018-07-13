@@ -65,7 +65,7 @@ public class LoadingUI : BaseUI, IPointerDownHandler
         //yield return ResourcesManager.Instance.LoadMapTiles();
         ResourcesManager.Instance.LoadUITextures();
        
-        ResourcesManager.Instance.LoadSceneAndGetSceneName();
+        //ResourcesManager.Instance.LoadSceneAndGetSceneName();
 
         //网络管理器
         GameObject networkManager = new GameObject("NetworkManager");
@@ -82,14 +82,14 @@ public class LoadingUI : BaseUI, IPointerDownHandler
 
     }
 
-    IEnumerator InstantiateResources()
+     IEnumerator InstantiateResources()
     {
 
-        AsyncOperation async = SceneManager.LoadSceneAsync(ResourcesManager.Instance.sceneName);
-        yield return async;
+        //AsyncOperation async = SceneManager.LoadSceneAsync(ResourcesManager.Instance.sceneName);
+        //yield return async;
 
-        
-        //SceneManager.LoadScene(ResourcesManager.Instance.sceneName);
+        AsyncOperation async =SceneManager.LoadSceneAsync(1);
+        yield return async;
         MapManager mapManager = GameObject.Find("MapManager").GetComponent<MapManager>();
         //网络玩家管理器
         //NetworkPlayerManager networkPlayerManager = GameObject.Find("NetworkPlayerManager").AddComponent<NetworkPlayerManager>();

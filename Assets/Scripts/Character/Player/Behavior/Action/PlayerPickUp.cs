@@ -27,7 +27,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Basic
             if(canPick.Value)
             {
                 avatar.playerController.PickItem();
-                avatar.animatorMgr.animator.SetBool("PickUp", true);
+                avatar.animatorMgr.animator.SetTrigger("PickUp");
             }
             return TaskStatus.Success;
 

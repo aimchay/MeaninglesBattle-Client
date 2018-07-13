@@ -16,6 +16,9 @@ public class ResourcesManager : Mono_DDOLSingleton<ResourcesManager>
 #endif
 */
 
+    [Header("单机")]
+    public bool IsStandalone = true;
+
     private Dictionary<string, GameObject> Dict_BaseMapTiles;
     private Dictionary<string, GameObject> Dict_Items;
     private Dictionary<string, Sprite> Dict_UITex;
@@ -24,9 +27,11 @@ public class ResourcesManager : Mono_DDOLSingleton<ResourcesManager>
 
     public string sceneName="";
 
-    void Start()
+    void Update()
     {
         //StartCoroutine(LoadMapTiles());
+        if (IsStandalone)
+            MessageCenter.Send(EMessageType.RefreshHUD, null);
     }
 
     public IEnumerator LoadAllRes()

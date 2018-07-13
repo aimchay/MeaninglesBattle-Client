@@ -26,9 +26,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Enemy
 
         public override TaskStatus OnUpdate()
         {
-
-
-
             return enemy.Chase() ? TaskStatus.Success : TaskStatus.Failure;
         }
     }

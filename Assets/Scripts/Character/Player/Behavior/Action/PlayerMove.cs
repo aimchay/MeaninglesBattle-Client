@@ -33,15 +33,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Basic.UnityCharacterController
 
             if (avatar != null)
             {
-                avatar.animatorMgr.animator.SetFloat("Horizontal", Horizontal.Value);
-                avatar.animatorMgr.animator.SetFloat("Vertical", Vertical.Value);
-                avatar.playerController.Move(avatar.characterStatus.moveSpeed);
-                return TaskStatus.Running;
-
+                    avatar.animatorMgr.animator.SetFloat("Horizontal", Horizontal.Value);
+                    avatar.animatorMgr.animator.SetFloat("Vertical", Vertical.Value);
+                    avatar.playerController.Move(avatar.characterStatus.moveSpeed);
+                    return TaskStatus.Success;             
             }
             else
                 return TaskStatus.Failure;
-
         }
     }
 }

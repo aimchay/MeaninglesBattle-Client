@@ -135,6 +135,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
         characterStatus = GetCharacterStatus();
         //MessageCenter.AddListener_Multparam(EMessageType.EquipItem, (object[] obj) => { EquipItem((EquippedItem)obj[0], (SingleItemInfo)obj[1]); });
         MessageCenter.AddListener(EMessageType.UseItem, (object[] obj) => { UseItem((int)obj[0]); });
+
     }
 
 
@@ -215,6 +216,7 @@ public class PlayerStatusManager : Mono_DDOLSingleton<PlayerStatusManager>
         }
 
         MessageCenter.Send(EMessageType.CurrentHP, characterStatus.HP);
+        
     }
 
     /// <summary>

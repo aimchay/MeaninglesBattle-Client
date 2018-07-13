@@ -237,6 +237,11 @@ public class MapManager : MonoSingleton<MapManager>
         return temp_RandomList;
     }
 
+    /// <summary>
+    /// 单机生成道具
+    /// </summary>
+  
+
     #endregion
     #region 毒圈回调代码
     /// <summary>

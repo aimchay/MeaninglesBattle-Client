@@ -14,12 +14,17 @@ public class StateActionDispatcher : BaseSMB {
     {
         if (StateEnterEvent != null)
             StateEnterEvent(this,stateInfo, layerIndex);
+        //NetworkManager.SendUpdatePlayerAction(stateInfo.fullPathHash);
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         if (StateUpdateEvent != null)
             StateUpdateEvent(this, stateInfo, layerIndex);
+
+        
+
+        
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

@@ -17,7 +17,9 @@ public class NetworkPlayer : MonoBehaviour {
     public int headItemID;
     public int bodyItemID;
     public int weaponID;
-    public int currentAction;
+    public string currentAction;
+    private string preAction;
+    public bool changeAction;
     public CharacterStatus characterStatus;
     
 
@@ -46,7 +48,6 @@ public class NetworkPlayer : MonoBehaviour {
     {
         Vector3 recvPos = new Vector3(posX,posY,posZ);
         Vector3 recvRot = new Vector3(rotX, rotY, rotZ);
-        
         forseePos = lastPos + (recvPos - lastPos) * 2;
         forseeRot = lastRot + (recvRot - lastRot) * 2;
         if (Time.time -LastUpdateTime>0.3f)
@@ -64,14 +65,14 @@ public class NetworkPlayer : MonoBehaviour {
     }
 
     /// <summary>
-    /// 设置当前动画Hash等
+    /// 设置当前输入动作
     /// </summary>
-    public void SetPlayerAction(int CurrentAction)
+    public void SetPlayerAction(string CurrentAction)
     {
-
-        Debug.Log(CurrentAction);
+        preAction = currentAction;
         currentAction = CurrentAction;
-       animator.Play(currentAction);
+        changeAction = true;
+        //animator.Play(currentAction);
         //animationManager.NetPlayClip(CurrentAction);
     }
 
@@ -174,16 +175,24 @@ public class NetworkPlayer : MonoBehaviour {
         if (DeltaTime > 0)
         {
             //位置插值
-            Vector3 curPos = transform.position;
-            transform.position = Vector3.Lerp(curPos, forseePos, DeltaTime);
-
+            //Vector3 curPos = transform.position;
+            transform.position = Vector3.Lerp(transform.position, forseePos, 0.1f);
+            animator.SetFloat("Horizontal", Mathf.Clamp(forseePos.x-transform.position.x ,-1,1));
+            animator.SetFloat("Vertical", Mathf.Clamp(forseePos.z-transform.position.z ,-1,1));
             //角度插值
             Vector3 curRot = transform.eulerAngles;
             transform.rotation = Quaternion.Lerp(Quaternion.Euler(curRot), Quaternion.Euler(forseeRot), DeltaTime);
         }
     }
+    private void FixedUpdate()
+    {
+        //transform.position = forseePos;
+        //transform.rotation = Quaternion.Euler(forseeRot);
+        ForseeMove();
+
+    }
     private void Update()
     {
-        ForseeMove();  
+       
     }
 }

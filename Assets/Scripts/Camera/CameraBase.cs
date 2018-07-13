@@ -36,8 +36,8 @@ public class CameraBase : MonoSingleton<CameraBase>
         Vector3 rot = transform.localRotation.eulerAngles;
         rotX = rot.x;
         rotY = rot.y;
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         isFollowing = true;
     }
 
@@ -49,8 +49,8 @@ public class CameraBase : MonoSingleton<CameraBase>
         } 
         else
         {
-           //Cursor.lockState = CursorLockMode.None;
-           //Cursor.visible = true;
+           Cursor.lockState = CursorLockMode.None;
+           Cursor.visible = true;
         }
 
         OpenBag();
@@ -74,8 +74,8 @@ public class CameraBase : MonoSingleton<CameraBase>
 
     private void Follow()
     {
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");

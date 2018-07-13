@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Meaningless;
 
 public class EnemyAvatar : Entity
 {
+    public string enemyName;
 
+    [HideInInspector]
     public NavMeshAgent navMeshAgent;
 
     [Header("Patrol")]
@@ -50,7 +53,7 @@ public class EnemyAvatar : Entity
     [Tooltip("可视角度")]
     public float sightAngle;
     public float chaseSpeed = 5f;
-    private GameObject targetGameObj;
+    protected GameObject targetGameObj;
 
     public bool Chase()
     {
@@ -67,22 +70,39 @@ public class EnemyAvatar : Entity
 
     public bool FindTarget()
     {
+
         float dis = (targetGameObj.transform.position - transform.position).magnitude;
         Vector3 relativeVector = targetGameObj.transform.position - transform.position;
         float ang = Vector3.Angle(relativeVector, transform.forward);
 
-        return dis < sightDistance && ang < sightAngle ? true : false;
+        return dis> attackDistance && dis < sightDistance && ang < sightAngle ? true : false;
 
     }
     #endregion
 
+
+
+
+    public bool isAttack;
+    public bool IsDefend;
+    public float attackDistance;
+
+    public bool CanAttack()
+    {
+        return Vector3.Distance(transform.position, targetGameObj.transform.position) <= attackDistance ? true : false;
+    }
+
     public CharacterStatus characterStatus;
 
     protected BehaviorDesigner.Runtime.BehaviorTree behaviorTree; 
-    private Animator animator;
+    [HideInInspector]
+    public Animator animator;
+
 
     void Start()
     {
+        characterStatus=MeaninglessJson.LoadJsonFromFile<CharacterStatus>(MeaninglessJson.Path_StreamingAssets + enemyName + ".json");
+
         navMeshAgent = GetComponent<NavMeshAgent>();
         behaviorTree = GetComponent<BehaviorDesigner.Runtime.BehaviorTree>();
         animator = GetComponent<Animator>();
@@ -96,5 +116,47 @@ public class EnemyAvatar : Entity
         targetGameObj = GameObject.FindWithTag("Player");
     }
 
+    public void CheckCanAttack(float distance, float angle)
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, distance, LayerMask.GetMask("Player"));
+        foreach (Collider collider in colliders)
+        {
+            Vector3 relativeVector = collider.transform.position - transform.position;
+            float ang = Vector3.Angle(relativeVector, transform.forward);
+
+            if (ang < angle)
+            {
+                float randomDamage = Random.Range(0.8f, 1.2f);
+                if (collider.GetComponent<NetworkPlayer>())
+                {
+                    NetworkPlayer networkPlayer = collider.GetComponent<NetworkPlayer>();
+                    NetworkManager.SendPlayerHitSomeone(networkPlayer.playerName, characterStatus.Attack_Physics * randomDamage);
+                }
+                else if (collider.GetComponent<PlayerAvatar>())
+                {
+                    PlayerAvatar player = collider.GetComponent<PlayerAvatar>();
+                    player.ReceiveDamage(characterStatus.Attack_Physics* randomDamage);
+                }
+            }
+        }
+    }
+
+    public void ReceiveDamage(float Damage)
+    {
+        if (IsDefend)
+        {
+            Damage /= 9; //临时数值
+        }
+
+        characterStatus.HP -= Damage;
+
+        if (characterStatus.HP < 0)
+            Dead();
+    }
+
+    public void Dead()
+    {
+        Destroy(gameObject);
+    }
 
 }

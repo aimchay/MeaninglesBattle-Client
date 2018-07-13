@@ -151,11 +151,11 @@ public class NetworkManager : MonoSingleton<NetworkManager>
     }
 
 
-    public static void SendUpdatePlayerAction(int CurrentAction)
+    public static void SendUpdatePlayerAction(string CurrentAction)
     {
         BytesProtocol protocol = new BytesProtocol();
         protocol.SpliceString("UpdatePlayerAction");
-        protocol.SpliceInt(CurrentAction);
+        protocol.SpliceString(CurrentAction);
         Send(protocol);
     }
     

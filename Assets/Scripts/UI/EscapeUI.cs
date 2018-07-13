@@ -14,7 +14,7 @@ public class EscapeUI : BaseUI
     {
         BtnBack = GameTool.GetTheChildComponent<Button>(this.gameObject, "BtnBack");
         BtnBack.onClick.AddListener(OnBackBtnClick);
-        BtnBackGame= GameTool.GetTheChildComponent<Button>(this.gameObject, "BtnBackGame");
+        BtnBackGame = GameTool.GetTheChildComponent<Button>(this.gameObject, "BtnBackGame");
         BtnBackGame.onClick.AddListener(OnBtnBackGame);
         BtnQuit = GameTool.GetTheChildComponent<Button>(this.gameObject, "BtnQuit");
         BtnQuit.onClick.AddListener(OnBtnQuit);
@@ -23,8 +23,9 @@ public class EscapeUI : BaseUI
     private void OnBackBtnClick()
     {
         CameraBase.Instance.isEscape = true;
-        NetworkManager.SendPlayerDead();
-        UIManager.Instance.ShowUI(UIid.MainUI);
+        if (!ResourcesManager.Instance.IsStandalone)
+            NetworkManager.SendPlayerDead();
+        UIManager.Instance.ShowUI(UIid.StartUI);
         UIManager.Instance.HideTheUI(UIid.EscapeUI, () => { });
     }
 
@@ -38,9 +39,10 @@ public class EscapeUI : BaseUI
     private void OnBtnQuit()
     {
         CameraBase.Instance.isEscape = true;
-        NetworkManager.SendPlayerDead();
+        if (!ResourcesManager.Instance.IsStandalone)
+            NetworkManager.SendPlayerDead();
         Application.Quit();
-        
+
     }
 
 }

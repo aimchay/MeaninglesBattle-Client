@@ -72,13 +72,10 @@ public class NetworkPlayerManager : MonoSingleton<NetworkPlayerManager>
         int startIndex = 0;
         p.GetString(startIndex, ref startIndex);
         string playerName = p.GetString(startIndex, ref startIndex);
-        int CurrentAction = p.GetInt(startIndex, ref startIndex);
-
-        Debug.Log(playerName + CurrentAction);
+        string CurrentAction = p.GetString(startIndex, ref startIndex);
 
         if (ScenePlayers.ContainsKey(playerName))
         {
-
             ScenePlayers[playerName].SetPlayerAction(CurrentAction);
         }
     }
