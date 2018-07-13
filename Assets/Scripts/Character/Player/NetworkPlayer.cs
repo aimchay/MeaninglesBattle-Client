@@ -102,6 +102,7 @@ public class NetworkPlayer : MonoBehaviour {
     {
         weaponID = ItemID;
         playerController.EquipWeapon(ItemID);
+        animator.SetInteger("WeaponType", (int)ItemInfoManager.Instance.GetItemInfo(ItemID).weaponProperties.weaponType);
     }
     /// <summary>
     /// 设置玩家名字

@@ -37,3 +37,22 @@ Thumbs.db
 Assets/Scripts/MeanlessFramework/AutoBuildTool.meta
 Assets/Resources/Debuff/NoBuff.mat.meta
 Assets/Models/Little Heroes Mega Pack/Animations/Base@Jump.FBX.meta
+Assets/Scene/Map1/LightingData.asset
+Assets/Scene/Map1/LightingData.asset.meta
+Assets/Scene/Standalone/LightingData.asset
+Assets/Scene/Standalone/LightingData.asset.meta
+Assets/Scene/Standalone/Lightmap-0_comp_dir.png
+Assets/Scene/Standalone/Lightmap-0_comp_dir.png.meta
+Assets/Scene/Standalone/Lightmap-0_comp_light.exr
+Assets/Scene/Standalone/Lightmap-0_comp_light.exr.meta
+Assets/Scene/Standalone/Lightmap-1_comp_dir.png
+Assets/Scene/Standalone/Lightmap-1_comp_dir.png.meta
+Assets/Scene/Standalone/Lightmap-1_comp_light.exr
+Assets/Scene/Standalone/Lightmap-1_comp_light.exr.meta
+Assets/Scene/Standalone/Lightmap-2_comp_dir.png
+Assets/Scene/Standalone/Lightmap-2_comp_dir.png.meta
+Assets/Scene/Standalone/Lightmap-2_comp_light.exr
+Assets/Scene/Standalone/Lightmap-2_comp_light.exr.meta
+Assets/Scene/Standalone/NavMesh.asset
+Assets/Scene/Map1/ReflectionProbe-0.exr.meta
+Assets/Scene/Map1/ReflectionProbe-0.exr

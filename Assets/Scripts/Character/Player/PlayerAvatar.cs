@@ -69,6 +69,7 @@ public class PlayerAvatar : Entity
         characterStatus = PlayerStatusManager.Instance.GetCharacterStatus();
         animatorMgr.animator.SetInteger("WeaponType", (int)characterStatus.weaponType);
         behaviorTree.SendEvent<int>("MagicType", (int)characterStatus.magicType);
+
     }
 
     private void FixedUpdate()
